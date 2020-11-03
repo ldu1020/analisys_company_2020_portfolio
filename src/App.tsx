@@ -1,24 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+/** @format */
+
+import React, { useEffect } from 'react';
+import FindCorpName from './component/find_corp_data_input/find_corp_name';
+import { fetchCORPCODE } from './service/dart_api';
+import { useStore } from './stores/setUpContext';
 
 function App() {
+  const { setCorpList } = useStore();
+  useEffect(() => {
+    setCorpList();
+  }, [setCorpList]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <FindCorpName />
     </div>
   );
 }
