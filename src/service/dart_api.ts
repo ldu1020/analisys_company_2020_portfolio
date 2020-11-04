@@ -26,13 +26,10 @@ export const fetchCORPCODE = async () => {
   }
 };
 
-export const fetchAccountsOfFS = async (
-  choiceCorpList: ChoiseCorpList
-): Promise<any> => {
+export const fetchAccountsOfFS = async (choiceCorpList: ChoiseCorpList) => {
   const { corp_code, bsns_year, reprt_code } = choiceCorpList;
   const MajorOfFsAPI = `api/fnlttSinglAcntAll.json?crtfc_key=${key}&corp_code=${corp_code}&bsns_year=${bsns_year}&reprt_code=${reprt_code}&fs_div=OFS`;
   console.log(MajorOfFsAPI);
-
   try {
     const MajorOfFS = await axios.get(MajorOfFsAPI);
     return MajorOfFS;
@@ -43,7 +40,7 @@ export const fetchAccountsOfFS = async (
 
 export const fetchMajorAccountsOfFS = async (
   choiceCorpList: ChoiseCorpList
-): Promise<any> => {
+) => {
   const { corp_code, bsns_year, reprt_code } = choiceCorpList;
   const MajorOfFsAPI = `api/fnlttSinglAcnt.json?crtfc_key=${key}&corp_code=${corp_code}&bsns_year=${bsns_year}&reprt_code=${reprt_code}`;
   console.log(MajorOfFsAPI);
@@ -56,9 +53,31 @@ export const fetchMajorAccountsOfFS = async (
   }
 };
 
+export const fetchRepurchase = async (choiceCorpList: ChoiseCorpList) => {
+  const { corp_code, bsns_year, reprt_code } = choiceCorpList;
+  const RepurchaseAPI = `api/tesstkAcqsDspsSttus.json?crtfc_key=${key}&corp_code=${corp_code}&bsns_year=${bsns_year}&reprt_code=${reprt_code}`;
+  console.log(RepurchaseAPI);
 
+  try {
+    const Repurchase = await axios.get(RepurchaseAPI);
+    return Repurchase;
+  } catch (err) {
+    console.log(err);
+  }
+};
 
+export const fetchStaff = async (choiceCorpList: ChoiseCorpList) => {
+  const { corp_code, bsns_year, reprt_code } = choiceCorpList;
+  const StaffAPI = `api/empSttus.json?crtfc_key=${key}&corp_code=${corp_code}&bsns_year=${bsns_year}&reprt_code=${reprt_code}`;
+  console.log(StaffAPI);
 
+  try {
+    const Staff = await axios.get(StaffAPI);
+    return Staff;
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 function unZip(res: any) {
   return JSZip.loadAsync(res.data).then((data) =>

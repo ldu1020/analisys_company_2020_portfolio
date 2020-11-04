@@ -1,5 +1,8 @@
 /** @format */
 
+import { fetchRepurchase, fetchStaff } from './../service/dart_api';
+/** @format */
+
 import { nanoid } from 'nanoid';
 import {
   fetchCORPCODE,
@@ -12,7 +15,7 @@ export function createStore() {
   return {
     corpList: [] as CORPCODE[],
     chosenCorpList: [] as ChosenCorpList[],
-    focusedCorpList: {} as ChosenCorpList,
+    focusedCorpList: null as ChosenCorpList | null,
     async setCorpList() {
       try {
         const fetchedData = await fetchCORPCODE();
@@ -28,76 +31,52 @@ export function createStore() {
       );
       return pick;
     },
-    choiceCorpList(inputState: InputState): ChoiseCorpList | void {
-      console.log(`들어온데이터: `);
-      console.log(inputState);
-      const pick = this.corpList.find(
-        (li: CORPCODE) => li.corp_name === inputState.corp_name
-      );
-      if (!pick) {
-        alert('찾으시는 회사명을 다시한번 확인 해 주세요');
-      } else {
-        const data = {
-          ...inputState,
-          id: nanoid(),
-          corp_code: pick.corp_code,
-          modify_date: pick.modify_date,
-        };
-        console.log(`가공된 데이터: `);
-        console.log(data);
-
-        return data;
-      }
-    },
-    async setChosenCorpList(choiceList: ChoiseCorpList) {
+    async addFetchedCorpData(choiceList: ChoiseCorpList) {
       try {
-        const fsListData = await fetchAccountsOfFS(choiceList);
-        const MajorFsListData = await fetchMajorAccountsOfFS(choiceList);
+        let allAccounts;
+        let majorAccounts;
+        let repurchase;
+        let staff;
 
-        let fsList: FsList[];
-        let MajorFsList: FsList[];
-
-        if (fsListData.data.list && MajorFsListData.data.list) {
-          fsList = (fsListData.data.list as FsList[]).map((accountList) => ({
-            ...accountList,
-            id: nanoid(),
-          }));
-          MajorFsList = (MajorFsListData.data.list as FsList[]).map(
-            (accountList) => ({
-              ...accountList,
+        Promise.all([
+          fetchAccountsOfFS(choiceList),
+          fetchMajorAccountsOfFS(choiceList),
+          fetchRepurchase(choiceList),
+          fetchStaff(choiceList),
+        ])
+          .then((data) => {
+            return data.map((li) =>
+              li && li.data.status === '000'
+                ? li.data.list
+                : [{ error: '데이터를 불러오지 못했습니다.' }]
+            );
+          })
+          .then((data) => {
+            allAccounts = data[0].map((li: AccountsType) => ({
+              ...li,
               id: nanoid(),
-            })
-          );
-          const { id, modify_date, corp_name } = choiceList;
-          this.chosenCorpList.push({
-            id,
-            corp_name,
-            modify_date,
-            fsList,
-            MajorFsList,
+            }));
+            majorAccounts = data[1];
+            repurchase = data[2];
+            staff = data[3];
+
+            const fetchedData = {
+              ...choiceList,
+              allAccounts,
+              majorAccounts,
+              repurchase,
+              staff,
+            };
+            this.chosenCorpList.push(fetchedData);
           });
-          this.focusedCorpList = {
-            id,
-            corp_name,
-            modify_date,
-            fsList,
-            MajorFsList,
-          };
-        } else {
-          alert('조회 된 데이터가 없습니다.');
-        }
       } catch (err) {
         console.log(err);
       }
     },
-    setFocusedCorpList(id: string) {
-      const dataSelected = this.chosenCorpList.find((li) => li.id === id);
-      dataSelected
-        ? (this.focusedCorpList = dataSelected)
-        : alert('해당 회사의 데이터가 없습니다.');
-      console.log(this.focusedCorpList);
+    setFocusedCorpList(data: ChosenCorpList | null) {
+      this.focusedCorpList = data;
     },
-    getFitterDataOfFS(MajorFsList: FsList[], type: FsFilterType) {
+    getFitterDataOfFS(MajorFsList: AccountsType[], type: FsFilterType) {
       if (!MajorFsList) {
         console.log(MajorFsList);
         return [

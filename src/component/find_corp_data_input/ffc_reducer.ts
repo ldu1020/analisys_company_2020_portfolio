@@ -1,14 +1,17 @@
 /** @format */
 
-export const ffc_initialState = {
+export const ffc_initialState: FindCorpState = {
   corp_name: '',
-  nameError: false,
-  corpData: null,
   bsns_year: '2019',
   reprt_code: '11011',
+  nameError: false,
+  corpData: null,
 };
 
-export function reducer(state: any, action: any) {
+export function reducer(
+  state: FindCorpState,
+  action: FindCorpAction
+): FindCorpState {
   switch (action.type) {
     case 'ON_CHANGE':
       const { name, value } = action.target;
@@ -24,8 +27,6 @@ export function reducer(state: any, action: any) {
       } else {
         return { ...state, nameError: true };
       }
-    case '':
-      return {};
     default:
       return state;
   }

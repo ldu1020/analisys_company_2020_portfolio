@@ -2,12 +2,16 @@
 
 import React from 'react';
 import { createStore, TStore } from './createStore';
-import { useLocalStore } from 'mobx-react';
+import { useLocalObservable, useLocalStore } from 'mobx-react';
+import { autorun } from 'mobx';
 
 const storeContext = React.createContext<TStore | null>(null);
 
 export const StoreProvider = ({ children }: any) => {
-  const store = useLocalStore(createStore);
+  const store = useLocalObservable(createStore);
+  autorun(() => {
+    console.log(store.chosenCorpList);
+  });
   return (
     <storeContext.Provider value={store}>{children}</storeContext.Provider>
   );
