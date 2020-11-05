@@ -5,8 +5,8 @@ import { autorun } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react';
 import React from 'react';
 import { useStore } from '../../stores/setUpContext';
-import { Account } from './account';
-import AccountsPicker from './accountsPicker';
+import Account from './account';
+import AccountsPicker from './accounts_picker';
 
 const AllAccounts = observer(() => {
   const { focusedCorpList } = useStore();
@@ -17,7 +17,7 @@ const AllAccounts = observer(() => {
       this.chosenAccounts = [];
     },
     onChoiceList(id: any): void {
-      const ChosenList = allAccounts.find((li) => li.id === id);
+      const ChosenList = allAccounts?.find((li) => li.id === id);
       console.log(allAccounts, ChosenList);
       ChosenList &&
         this.chosenAccounts.indexOf(ChosenList) === -1 &&
@@ -32,29 +32,37 @@ const AllAccounts = observer(() => {
     console.log(AccountsStore.chosenAccounts);
   });
   return (
-    <Grid container direction='row' alignItems='center' spacing={1}>
-      <Grid item xs={6}>
-        <Card>
-          <Account
-            fsList={allAccounts as AccountsType[]}
-            clickCallBack={AccountsStore.onChoiceList}
-          />
-        </Card>
-      </Grid>
-      <Grid item xs={6}>
-        <Card>
-          <Account
-            fsList={AccountsStore.chosenAccounts}
-            clickCallBack={AccountsStore.onReomveList}
-          />
-        </Card>
-      </Grid>
-      <Grid item xs={12}>
-        <Card>
-          <AccountsPicker chosenFsList={AccountsStore.chosenAccounts} />
-        </Card>
-      </Grid>
-    </Grid>
+    <>
+      {allAccounts ? (
+        <Grid container direction='row' alignItems='center' spacing={1}>
+          <Grid item xs={6}>
+            <Card>
+              <Account
+                fsList={allAccounts as AccountsType[]}
+                clickCallBack={AccountsStore.onChoiceList}
+              />
+            </Card>
+          </Grid>
+          <Grid item xs={6}>
+            <Card>
+              <Account
+                fsList={AccountsStore.chosenAccounts}
+                clickCallBack={AccountsStore.onReomveList}
+              />
+            </Card>
+          </Grid>
+          <Grid item xs={12}>
+            <Card>
+              <AccountsPicker chosenFsList={AccountsStore.chosenAccounts} />
+            </Card>
+          </Grid>
+        </Grid>
+      ) : (
+        <div>
+          <h1>데이터가 없ㅅ급니다.</h1>
+        </div>
+      )}
+    </>
   );
 });
 

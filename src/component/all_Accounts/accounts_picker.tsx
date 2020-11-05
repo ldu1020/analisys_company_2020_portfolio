@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core';
 import { observer } from 'mobx-react';
 import React, { useState } from 'react';
-import ChartOfAccounts from './chartOfAccount';
+import ChartOfAccounts from './chart_of_account';
 
 interface AccountsPickerProps {
   chosenFsList: AccountsType[];

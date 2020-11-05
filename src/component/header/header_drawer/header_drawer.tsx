@@ -5,7 +5,6 @@ import {
   Drawer,
   List,
   ListItem,
-  ListItemIcon,
   ListItemText,
 } from '@material-ui/core';
 import React from 'react';

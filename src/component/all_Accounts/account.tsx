@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const Account: React.FC<AccountsProps> = observer(
+const Account: React.FC<AccountsProps> = observer(
   ({ fsList, clickCallBack }) => {
     const classes = useStyles();
 
@@ -77,3 +77,4 @@ export const Account: React.FC<AccountsProps> = observer(
     );
   }
 );
+export default Account;

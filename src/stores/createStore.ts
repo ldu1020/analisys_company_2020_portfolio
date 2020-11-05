@@ -15,7 +15,7 @@ export function createStore() {
   return {
     corpList: [] as CORPCODE[],
     chosenCorpList: [] as ChosenCorpList[],
-    focusedCorpList: null as ChosenCorpList | null,
+    focusedCorpList: {} as ChosenCorpList,
     async setCorpList() {
       try {
         const fetchedData = await fetchCORPCODE();
@@ -46,16 +46,16 @@ export function createStore() {
         ])
           .then((data) => {
             return data.map((li) =>
-              li && li.data.status === '000'
-                ? li.data.list
-                : [{ error: '데이터를 불러오지 못했습니다.' }]
+              li && li.data.status === '000' ? li.data.list : null
             );
           })
           .then((data) => {
-            allAccounts = data[0].map((li: AccountsType) => ({
-              ...li,
-              id: nanoid(),
-            }));
+            allAccounts =
+              data[0] &&
+              data[0].map((li: AccountsType) => ({
+                ...li,
+                id: nanoid(),
+              }));
             majorAccounts = data[1];
             repurchase = data[2];
             staff = data[3];
@@ -73,58 +73,22 @@ export function createStore() {
         console.log(err);
       }
     },
-    setFocusedCorpList(data: ChosenCorpList | null) {
+    setFocusedCorpList(data: ChosenCorpList) {
       this.focusedCorpList = data;
     },
-    getFitterDataOfFS(MajorFsList: AccountsType[], type: FsFilterType) {
-      if (!MajorFsList) {
-        console.log(MajorFsList);
-        return [
-          {
-            account_nm: '데이터 불러오기 실패',
-            amount: '0',
-            rate: `-100`,
-          },
-        ];
-      } else {
-        const FSData = MajorFsList.filter(
-          (li) => li.sj_div === type && li.fs_div === 'OFS'
-        );
-        let data;
+    get fitteredMajorDataOfFocused() {
+      const majorAccount = this.focusedCorpList?.majorAccounts;
 
-        switch (type) {
-          case 'IS':
-            const WholeBnefit = FSData[0].thstrm_amount.split(',').join('');
-            data = FSData.map((li: any) => {
-              const eachRate = li.thstrm_amount.split(',').join('');
-              const rate = (Number(eachRate) / Number(WholeBnefit)) * 100;
-              return {
-                account_nm: li.account_nm,
-                amount: li.thstrm_amount,
-                rate: `${rate.toFixed(1)}`,
-              };
-            });
-            break;
-          case 'BS':
-            const wholeAsset = FSData.find((li) => li.account_nm === '자산총계')
-              ?.thstrm_amount.split(',')
-              .join('');
-            console.log(wholeAsset);
-            data = FSData.map((li: any) => {
-              const eachRate = li.thstrm_amount.split(',').join('');
-              let rate = (Number(eachRate) / Number(wholeAsset)) * 100;
-              console.log(rate);
-              return {
-                account_nm: li.account_nm,
-                amount: li.thstrm_amount,
-                rate: rate ? `${rate.toFixed(2)}` : li.thstrm_amount,
-              };
-            });
-            break;
-        }
-
-        return data;
-      }
+      const ISdata = majorAccount?.filter(
+        (li) => li.sj_div === 'IS' && li.fs_div === 'OFS'
+      );
+      const BSdata = majorAccount?.filter(
+        (li) => li.sj_div === 'BS' && li.fs_div === 'OFS'
+      );
+      const CFdata = majorAccount?.filter(
+        (li) => li.sj_div === 'CF' && li.fs_div === 'OFS'
+      );
+      return { ISdata, BSdata, CFdata };
     },
   };
 }

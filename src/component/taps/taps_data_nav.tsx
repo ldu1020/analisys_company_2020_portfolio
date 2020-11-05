@@ -6,12 +6,12 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
-import MajorAccounts from '../major_accounts/major_accounts';
 import Staff from '../staff/staff';
 import Repurchase from '../repurchase/repurchase';
-import AllAccounts from '../all_Accounts/AllAccounts';
+import AllAccounts from '../all_accounts/main_all_accounts';
 import { useStore } from '../../stores/setUpContext';
 import { observer } from 'mobx-react';
+import AllMajorAccounts from '../major-accounts/main_major_accouts';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -74,7 +74,7 @@ const TapsDataNav = observer(() => {
         {focusedCorpList && <AllAccounts />}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <MajorAccounts />
+        <AllMajorAccounts />
       </TabPanel>
       <TabPanel value={value} index={2}>
         <Staff />
