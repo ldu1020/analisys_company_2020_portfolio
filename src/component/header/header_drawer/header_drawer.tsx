@@ -8,16 +8,8 @@ import {
   ListItemText,
 } from '@material-ui/core';
 import React from 'react';
+import { useStore } from '../../../stores/setUpContext';
 import styles from './header_drawer.module.css';
-
-const drawerState = [
-  {
-    label: '할일목록',
-  },
-  {
-    label: '한일목록',
-  },
-];
 
 interface HeaderDrawerProps {
   open: boolean;
@@ -25,6 +17,12 @@ interface HeaderDrawerProps {
 }
 
 const HeaderDrawer: React.FC<HeaderDrawerProps> = ({ open, toggleOpen }) => {
+  const {
+    chosenCorpList,
+    removeChosenCorpList,
+    setFocusedCorpList,
+  } = useStore();
+
   return (
     <nav className={styles.nav} aria-label='mailbox folders'>
       <Drawer
@@ -36,12 +34,27 @@ const HeaderDrawer: React.FC<HeaderDrawerProps> = ({ open, toggleOpen }) => {
           keepMounted: true, // Better open performance on mobile.
         }}>
         <List className={styles.list}>
-          {drawerState.map((item) => (
-            <ListItem className={styles.item} onClick={toggleOpen} button>
+          {chosenCorpList.map((item) => (
+            <ListItem
+              className={styles.item}
+              onClick={() => {
+                toggleOpen();
+                setFocusedCorpList(
+                  chosenCorpList.find(
+                    (li) => li.id === item.id
+                  ) as ChosenCorpList
+                );
+              }}
+              button>
               <ListItemText
-                primary={item.label}
+                primary={item.corp_name}
+                secondary={item.bsns_year}
                 primaryTypographyProps={{ className: styles.text }}
               />
+              <button
+                onClick={() => {
+                  removeChosenCorpList(item.id);
+                }}></button>
             </ListItem>
           ))}
         </List>

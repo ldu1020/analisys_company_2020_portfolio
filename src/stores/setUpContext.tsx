@@ -9,9 +9,6 @@ const storeContext = React.createContext<TStore | null>(null);
 
 export const StoreProvider = ({ children }: any) => {
   const store = useLocalObservable(createStore);
-  autorun(() => {
-    console.log(store.chosenCorpList);
-  });
   return (
     <storeContext.Provider value={store}>{children}</storeContext.Provider>
   );

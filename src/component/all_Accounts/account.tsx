@@ -1,6 +1,7 @@
 /** @format */
 
 import {
+  Grow,
   List,
   ListItem,
   ListItemText,
@@ -13,7 +14,7 @@ import React from 'react';
 
 interface AccountsProps {
   fsList: AccountsType[];
-  clickCallBack: (id: any) => any;
+  clickCallBack: (item: any) => any;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -54,21 +55,23 @@ const Account: React.FC<AccountsProps> = observer(
                 {fsList
                   .filter((li) => li.sj_div === account)
                   .map((item) => (
-                    <ListItem
-                      key={`item-${account}-${nanoid()}`}
-                      onClick={() => {
-                        clickCallBack(item.id);
-                      }}
-                      button>
-                      <ListItemText
-                        primary={`${item.account_nm}`}
-                        secondary={
-                          item.account_detail === '-'
-                            ? null
-                            : item.account_detail
-                        }
-                      />
-                    </ListItem>
+                    <Grow in>
+                      <ListItem
+                        key={`item-${account}-${nanoid()}`}
+                        onClick={() => {
+                          clickCallBack(item);
+                        }}
+                        button>
+                        <ListItemText
+                          primary={`${item.account_nm}`}
+                          secondary={
+                            item.account_detail === '-'
+                              ? null
+                              : item.account_detail
+                          }
+                        />
+                      </ListItem>
+                    </Grow>
                   ))}
               </ul>
             </li>
@@ -77,4 +80,4 @@ const Account: React.FC<AccountsProps> = observer(
     );
   }
 );
-export default Account;
+export default React.memo(Account);

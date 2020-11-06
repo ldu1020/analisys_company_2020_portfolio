@@ -1,17 +1,21 @@
 /** @format */
 
 import React from 'react';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import Staff from '../staff/staff';
-import Repurchase from '../repurchase/repurchase';
 import AllAccounts from '../all_accounts/main_all_accounts';
 import { useStore } from '../../stores/setUpContext';
 import { observer } from 'mobx-react';
 import AllMajorAccounts from '../major-accounts/main_major_accouts';
+import { Paper } from '@material-ui/core';
+import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
+import NonFetchedDataDisplay from '../non_fetched_data/non_fetched_data';
+import Repurchase from '../repurchase/repurchase';
+import ApartmentIcon from '@material-ui/icons/Apartment';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -34,53 +38,43 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-function a11yProps(index: any) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
-  },
-}));
-
 const TapsDataNav = observer(() => {
-  const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const { focusedCorpList } = useStore();
-
+  const { allAccounts, majorAccounts, staff } = focusedCorpList;
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
 
   return (
-    <div className={classes.root}>
-      <AppBar position='static'>
+    <div>
+      <Paper>
         <Tabs
           value={value}
+          indicatorColor='secondary'
+          textColor='secondary'
+          variant='scrollable'
+          scrollButtons='on'
           onChange={handleChange}
           aria-label='simple tabs example'>
-          <Tab label='Item One' {...a11yProps(0)} />
-          <Tab label='Item Two' {...a11yProps(1)} />
-          <Tab label='Item Three' {...a11yProps(2)} />
-          <Tab label='Item four' {...a11yProps(3)} />
+          <Tab icon={<AccountBalanceIcon />} label='재무제표' />
+          <Tab icon={<ChangeHistoryIcon />} label='주요계정과목' />
+          <Tab icon={<AssignmentIndIcon />} label='직원현황' />
+          <Tab icon={<ApartmentIcon />} label='자사주매입' />
         </Tabs>
-      </AppBar>
+      </Paper>
+
       <TabPanel value={value} index={0}>
-        {focusedCorpList && <AllAccounts />}
+        {allAccounts ? <AllAccounts /> : <NonFetchedDataDisplay />}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <AllMajorAccounts />
+        {majorAccounts ? <AllMajorAccounts /> : <NonFetchedDataDisplay />}
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <Staff />
+        {staff ? <Staff /> : <NonFetchedDataDisplay />}
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <Repurchase />
+        {staff ? <Repurchase /> : <NonFetchedDataDisplay />}
       </TabPanel>
     </div>
   );

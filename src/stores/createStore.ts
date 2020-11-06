@@ -1,15 +1,12 @@
 /** @format */
 
 import { fetchRepurchase, fetchStaff } from './../service/dart_api';
-/** @format */
-
 import { nanoid } from 'nanoid';
 import {
-  fetchCORPCODE,
   fetchAccountsOfFS,
   fetchMajorAccountsOfFS,
 } from './../service/dart_api';
-/** @format */
+import { testSync } from '../service/database';
 
 export function createStore() {
   return {
@@ -18,12 +15,24 @@ export function createStore() {
     focusedCorpList: {} as ChosenCorpList,
     async setCorpList() {
       try {
-        const fetchedData = await fetchCORPCODE();
-        console.log(fetchedData);
-        this.corpList = [...fetchedData];
+        // const fetchedData = await fetchCORPCODE();
+        // console.log(fetchedData);
+        // this.corpList = [...fetchedData];
+
+        //FOR TEST
+        testSync((data: any) => {
+          this.focusedCorpList = data;
+        });
+        console.log('fetcj!');
       } catch (err) {
         console.log(err);
       }
+    },
+    addChosenCorpList(data: ChosenCorpList) {
+      this.chosenCorpList.push(data);
+    },
+    removeChosenCorpList(id: string) {
+      this.chosenCorpList = this.chosenCorpList.filter((li) => li.id !== id);
     },
     findCorpName(corp_name: string) {
       const pick = this.corpList.find(
@@ -67,7 +76,8 @@ export function createStore() {
               repurchase,
               staff,
             };
-            this.chosenCorpList.push(fetchedData);
+            this.addChosenCorpList(fetchedData);
+            this.setFocusedCorpList(fetchedData);
           });
       } catch (err) {
         console.log(err);

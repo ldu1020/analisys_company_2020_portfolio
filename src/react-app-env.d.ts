@@ -18,7 +18,7 @@ interface STORE {
   setFocusedCorpList(data: ChosenCorpList | null): void;
 }
 
-interface ChosenCorpList extends InputState {
+interface ChosenCorpList extends ChoiseCorpList {
   allAccounts: AccountsType[] | null;
   majorAccounts: MajorAccountsType[] | null;
   staff: StaffType[] | null;
