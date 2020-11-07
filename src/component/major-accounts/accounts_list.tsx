@@ -15,7 +15,7 @@ const AccountsList: React.FC<AccountsListProps> = observer(
     return (
       <Card>
         <List>
-          <Box height={300} overflow={'auto'}>
+          <Box>
             {majorAccount.map((li) => {
               return (
                 <ListItem

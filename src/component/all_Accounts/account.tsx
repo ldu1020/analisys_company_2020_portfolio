@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: 'inherit',
     padding: 0,
   },
+  subHeader: {
+    color: theme.palette.info.light,
+  },
 }));
 
 const Account: React.FC<AccountsProps> = observer(
@@ -48,10 +51,12 @@ const Account: React.FC<AccountsProps> = observer(
     return (
       <List className={classes.root} subheader={<li />}>
         {AccountHeader &&
-          AccountHeader.map((account: any) => (
+          AccountHeader.map((account) => (
             <li key={`section-${account}`} className={classes.listSection}>
               <ul className={classes.ul}>
-                <ListSubheader>{account}</ListSubheader>
+                <ListSubheader className={classes.subHeader}>
+                  {sjHeaderSwitch(account)}
+                </ListSubheader>
                 {fsList
                   .filter((li) => li.sj_div === account)
                   .map((item) => (
@@ -80,4 +85,22 @@ const Account: React.FC<AccountsProps> = observer(
     );
   }
 );
+
+function sjHeaderSwitch(accountHeader: AccountsType['sj_div']) {
+  switch (accountHeader) {
+    case 'IS':
+      return '손익계산서(IS)';
+    case 'BS':
+      return '대차대조표(BS)';
+    case 'CIS':
+      return '포괄손익계산서(CIS)';
+    case 'CF':
+      return '현금흐름표(CF)';
+    case 'SCE':
+      return '자본변동표(SCE)';
+    default:
+      return '알 수 없음';
+  }
+}
+
 export default React.memo(Account);

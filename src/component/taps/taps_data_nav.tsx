@@ -9,13 +9,21 @@ import AllAccounts from '../all_accounts/main_all_accounts';
 import { useStore } from '../../stores/setUpContext';
 import { observer } from 'mobx-react';
 import AllMajorAccounts from '../major-accounts/main_major_accouts';
-import { Paper } from '@material-ui/core';
+import { makeStyles, Paper } from '@material-ui/core';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import NonFetchedDataDisplay from '../non_fetched_data/non_fetched_data';
 import Repurchase from '../repurchase/repurchase';
 import ApartmentIcon from '@material-ui/icons/Apartment';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    position: 'sticky',
+    top: '0',
+    zIndex: theme.zIndex.appBar,
+  },
+}));
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -41,6 +49,7 @@ function TabPanel(props: TabPanelProps) {
 const TapsDataNav = observer(() => {
   const [value, setValue] = React.useState(0);
   const { focusedCorpList } = useStore();
+  const classes = useStyles();
   const { allAccounts, majorAccounts, staff } = focusedCorpList;
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
@@ -48,7 +57,7 @@ const TapsDataNav = observer(() => {
 
   return (
     <div>
-      <Paper>
+      <Paper className={classes.root}>
         <Tabs
           value={value}
           indicatorColor='secondary'

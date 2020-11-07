@@ -95,10 +95,8 @@ export function createStore() {
       const BSdata = majorAccount?.filter(
         (li) => li.sj_div === 'BS' && li.fs_div === 'OFS'
       );
-      const CFdata = majorAccount?.filter(
-        (li) => li.sj_div === 'CF' && li.fs_div === 'OFS'
-      );
-      return { ISdata, BSdata, CFdata };
+
+      return { ISdata, BSdata };
     },
   };
 }
