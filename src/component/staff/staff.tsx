@@ -1,9 +1,13 @@
 /** @format */
 
-import { Card, List, ListItem, makeStyles } from '@material-ui/core';
-import { observer } from 'mobx-react';
+import { makeStyles, Tab, Tabs } from '@material-ui/core';
+import { autorun } from 'mobx';
+import { observer, useLocalObservable } from 'mobx-react';
 import React from 'react';
 import { useStore } from '../../stores/setUpContext';
+import StaffCard from './staff_card';
+import StaffGraph from './staff_graph';
+import { staffState } from './staff_state';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -17,41 +21,43 @@ const Staff = observer(() => {
   const { focusedCorpList } = useStore();
   const { staff } = focusedCorpList;
   const classes = useStyles();
+  const state = useLocalObservable(staffState);
+
   const staffHeader = Array.from(
     new Set((staff as StaffType[]).map((li) => li.fo_bbm))
   );
 
+  autorun(() => {
+    if (staff && !state.dataOfHeader.length) {
+      const defaultData = staff.filter((li) => li.fo_bbm === staffHeader[0]);
+      state.setHeaderData(defaultData);
+    }
+  });
+
   return (
     <div className={classes.root}>
-      {staffHeader.map((header) => {
-        const data = (staff as StaffType[]).filter(
-          (item) => item.fo_bbm === header
-        );
-        return (
-          <div>
-            <h1 className={classes.cardHeader}>{header}</h1>
-            <Card className={classes.eachCard}>
-              {data.map((list) => (
-                <div>
-                  <li>성별 {list.sexdstn}</li>
-                  <List>
-                    <ListItem>정직원수 {list.rgllbr_co}</ListItem>
-                    <ListItem>계약직수 {list.cnttk_co}</ListItem>
-                    <ListItem>1인 평균 급여액 {list.jan_salary_am}</ListItem>
-                    <ListItem>연간 급여 총액{list.fyer_salary_totamt}</ListItem>
-                    <ListItem>합계:{list.sm}</ListItem>
-                    <ListItem>비고:{list.rm}</ListItem>
-                  </List>
-                </div>
-              ))}
-            </Card>
-          </div>
-        );
-      })}
+      <StaffGraph dataForGraph={state.dataForGraph} eachRate={state.eachRate} />
+      <Tabs
+        value={state.navValue}
+        onChange={(e, value) => {
+          state.setNavValue(value);
+          const data = staff?.filter((li) => li.fo_bbm === staffHeader[value]);
+          data && state.setHeaderData(data);
+        }}
+        variant='scrollable'
+        scrollButtons='on'>
+        {staffHeader.map((header, index) => (
+          <Tab label={header} value={index} />
+        ))}
+      </Tabs>
+      {
+        <StaffCard
+          genderData={state.genderData}
+          setData={state.setDataForGraph}
+        />
+      }
     </div>
   );
 });
-
-function getClassfiedStaff(staff: StaffType[]) {}
 
 export default Staff;

@@ -2,19 +2,27 @@
 
 import {
   Grow,
+  IconButton,
   List,
   ListItem,
   ListItemText,
   ListSubheader,
   makeStyles,
+  Menu,
+  MenuItem,
 } from '@material-ui/core';
 import { observer } from 'mobx-react';
 import { nanoid } from 'nanoid';
 import React from 'react';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+
+type AccountCallBack = (item: AccountsType) => void;
 
 interface AccountsProps {
   fsList: AccountsType[];
-  clickCallBack: (item: any) => any;
+  clickCallBack:
+    | AccountCallBack
+    | { role: string; function: AccountCallBack }[];
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -40,7 +48,6 @@ const useStyles = makeStyles((theme) => ({
 const Account: React.FC<AccountsProps> = observer(
   ({ fsList, clickCallBack }) => {
     const classes = useStyles();
-
     let AccountsCategory = fsList && fsList.map((li) => li.sj_div);
     const AccountHeader =
       AccountsCategory &&
@@ -60,23 +67,11 @@ const Account: React.FC<AccountsProps> = observer(
                 {fsList
                   .filter((li) => li.sj_div === account)
                   .map((item) => (
-                    <Grow in>
-                      <ListItem
-                        key={`item-${account}-${nanoid()}`}
-                        onClick={() => {
-                          clickCallBack(item);
-                        }}
-                        button>
-                        <ListItemText
-                          primary={`${item.account_nm}`}
-                          secondary={
-                            item.account_detail === '-'
-                              ? null
-                              : item.account_detail
-                          }
-                        />
-                      </ListItem>
-                    </Grow>
+                    <Item
+                      key={nanoid()}
+                      item={item}
+                      clickCallBack={clickCallBack}
+                    />
                   ))}
               </ul>
             </li>
@@ -85,6 +80,62 @@ const Account: React.FC<AccountsProps> = observer(
     );
   }
 );
+
+interface ItemProps {
+  clickCallBack:
+    | AccountCallBack
+    | { role: string; function: AccountCallBack }[];
+  item: AccountsType;
+}
+
+const Item: React.FC<ItemProps> = ({ item, clickCallBack }) => {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+    console.log(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  return (
+    <ListItem
+      onClick={() => {
+        typeof clickCallBack === 'function' && clickCallBack(item);
+      }}
+      button>
+      <ListItemText
+        primary={item.account_nm}
+        secondary={item.account_detail === '-' ? null : item.account_detail}
+      />
+      {Array.isArray(clickCallBack) && (
+        <div>
+          <IconButton aria-haspopup='true' onClick={handleClick}>
+            <MoreVertIcon />
+          </IconButton>
+          <Menu
+            keepMounted
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}>
+            {clickCallBack.map((callbackList) => {
+              return (
+                <MenuItem
+                  onClick={() => {
+                    callbackList.function(item);
+                    handleClose();
+                  }}>
+                  {callbackList.role}
+                </MenuItem>
+              );
+            })}
+          </Menu>
+        </div>
+      )}
+    </ListItem>
+  );
+};
 
 function sjHeaderSwitch(accountHeader: AccountsType['sj_div']) {
   switch (accountHeader) {

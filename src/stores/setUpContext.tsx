@@ -2,8 +2,7 @@
 
 import React from 'react';
 import { createStore, TStore } from './createStore';
-import { useLocalObservable, useLocalStore } from 'mobx-react';
-import { autorun } from 'mobx';
+import { useLocalObservable } from 'mobx-react';
 
 const storeContext = React.createContext<TStore | null>(null);
 

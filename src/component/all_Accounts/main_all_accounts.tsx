@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AllAccounts = observer(() => {
-  const { focusedCorpList } = useStore();
+  const { focusedCorpList, addItemForCustom } = useStore();
   const { allAccounts } = focusedCorpList as ChosenCorpList;
   const classes = useStyles();
 
@@ -38,13 +38,20 @@ const AllAccounts = observer(() => {
     onReset() {
       this.chosenAccounts = [];
     },
-    onChoiceList(item: any): void {
+    onChoiceList(item: AccountsType): void {
       const index = this.chosenAccounts.indexOf(item);
       index === -1 && this.chosenAccounts.push(item);
     },
-    onReomveList(item: any): void {
+    onReomveList(item: AccountsType): void {
       const index = this.chosenAccounts.indexOf(item);
       this.chosenAccounts.splice(index, 1);
+    },
+    onAddForCustom(item: AccountsType) {
+      const name = item.account_nm;
+      const detail =
+        item.account_detail === '-' ? undefined : item.account_detail;
+      const amount = item.thstrm_amount;
+      addItemForCustom({ name, amount, detail });
     },
   }));
 
@@ -62,7 +69,10 @@ const AllAccounts = observer(() => {
       <Card className={classes.accountCard}>
         <Account
           fsList={AccountsStore.chosenAccounts}
-          clickCallBack={AccountsStore.onReomveList}
+          clickCallBack={[
+            { role: '제거하기', function: AccountsStore.onReomveList },
+            { role: '커스텀등록', function: AccountsStore.onAddForCustom },
+          ]}
         />
       </Card>
       <AccountsPicker chosenFsList={AccountsStore.chosenAccounts} />

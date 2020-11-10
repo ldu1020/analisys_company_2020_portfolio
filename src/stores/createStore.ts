@@ -11,8 +11,6 @@ import { testSync } from '../service/database';
 export function createStore() {
   return {
     corpList: [] as CORPCODE[],
-    chosenCorpList: [] as ChosenCorpList[],
-    focusedCorpList: {} as ChosenCorpList,
     async setCorpList() {
       try {
         // const fetchedData = await fetchCORPCODE();
@@ -28,6 +26,7 @@ export function createStore() {
         console.log(err);
       }
     },
+    chosenCorpList: [] as ChosenCorpList[],
     addChosenCorpList(data: ChosenCorpList) {
       this.chosenCorpList.push(data);
     },
@@ -83,6 +82,7 @@ export function createStore() {
         console.log(err);
       }
     },
+    focusedCorpList: {} as ChosenCorpList,
     setFocusedCorpList(data: ChosenCorpList) {
       this.focusedCorpList = data;
     },
@@ -97,6 +97,18 @@ export function createStore() {
       );
 
       return { ISdata, BSdata };
+    },
+    customSET: [],
+    itemForCustom: [] as ItemForCustomData[],
+    addItemForCustom(data: ItemForCustomData) {
+      console.log(this.itemForCustom);
+      const notInnerData = this.itemForCustom.findIndex(
+        (li) => li.name + li.detail === data.name + data.detail
+      );
+      notInnerData === -1 && this.itemForCustom.push(data);
+    },
+    removeItemForCustom(name: string) {
+      this.itemForCustom = this.itemForCustom.filter((li) => li.name !== name);
     },
   };
 }

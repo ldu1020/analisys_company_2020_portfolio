@@ -1,6 +1,7 @@
 /** @format */
 
 import {
+  Badge,
   Divider,
   Drawer,
   List,
@@ -18,6 +19,7 @@ interface HeaderDrawerProps {
 
 const HeaderDrawer: React.FC<HeaderDrawerProps> = ({ open, toggleOpen }) => {
   const {
+    itemForCustom,
     chosenCorpList,
     removeChosenCorpList,
     setFocusedCorpList,
@@ -34,6 +36,11 @@ const HeaderDrawer: React.FC<HeaderDrawerProps> = ({ open, toggleOpen }) => {
           keepMounted: true, // Better open performance on mobile.
         }}>
         <List className={styles.list}>
+          <ListItem className={styles.item} button>
+            <Badge color='secondary' badgeContent={itemForCustom.length}>
+              <ListItemText primary='나만의 공식 제작소' />
+            </Badge>
+          </ListItem>
           {chosenCorpList.map((item) => (
             <ListItem
               className={styles.item}

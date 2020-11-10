@@ -73,6 +73,12 @@ type AmountOf3Years = {
   bfefrmtrm_amount: string;
 };
 
+type ItemForCustomData = {
+  name: string;
+  amount: string;
+  detail?: string;
+};
+
 /**전채제무제표의 계정과목 */
 type AccountsType = {
   /**mapping 으로 부여한 아이디 */

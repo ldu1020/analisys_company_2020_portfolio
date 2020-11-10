@@ -10,7 +10,6 @@ interface ChartOfAccountsProps {
 
 const ChartOfAccounts: React.FC<ChartOfAccountsProps> = observer(
   ({ pickedItem }) => {
-    console.log(pickedItem);
     if (pickedItem) {
       const {
         account_detail,
@@ -41,12 +40,41 @@ const ChartOfAccounts: React.FC<ChartOfAccountsProps> = observer(
           },
         ],
       };
+      const options = {
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                callback: function (value: any) {
+                  return moneyToString(value);
+                },
+              },
+            },
+          ],
+        },
+      };
 
-      return <Line data={data} />;
+      return <Line data={data} options={options} />;
     } else {
       return null;
     }
   }
 );
+
+function moneyToString(money: number) {
+  if (money > 1000000000000) {
+    return (money / 1000000000000).toFixed(1) + '조 원';
+  } else if (money > 100000000) {
+    return (money / 100000000).toFixed(1) + '억 원';
+  } else if (money > 10000) {
+    return (money / 10000).toFixed(1) + '만 원';
+  } else if (money < -10000) {
+    return (money / 10000).toFixed(1) + '만 원';
+  } else if (money < -100000000) {
+    return (money / 100000000).toFixed(1) + '억 원';
+  } else if (money < -1000000000000) {
+    return (money / 1000000000000).toFixed(1) + '조 원';
+  }
+}
 
 export default ChartOfAccounts;

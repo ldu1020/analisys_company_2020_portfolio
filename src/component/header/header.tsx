@@ -2,43 +2,86 @@
 
 import {
   AppBar,
+  Badge,
   Button,
   IconButton,
+  makeStyles,
   Toolbar,
   Typography,
 } from '@material-ui/core';
 import React, { useState } from 'react';
 import MenuIcon from '@material-ui/icons/Menu';
-import styles from './header.module.css';
 import HeaderDrawer from './header_drawer/header_drawer';
+import { useStore } from '../../stores/setUpContext';
+import { reaction } from 'mobx';
 
 interface HeaderProps {
   onLogout?: () => void;
   userData?: UserData;
 }
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: theme.palette.primary.main,
+    position: 'relative',
+  },
+  badge: {},
+  subButton: {
+    color: '#fff',
+    position: 'fixed',
+    bottom: '3rem',
+    right: '1rem',
+    backgroundColor: theme.palette.primary.light,
+    boxShadow: theme.shadows['2'],
+    '&:hover': {
+      backgroundColor: theme.palette.primary.dark,
+      boxShadow: 'none',
+    },
+    '&:active': {
+      boxShadow: 'none',
+    },
+  },
+  logoutBtn: {
+    position: 'absolute',
+    right: '1rem',
+  },
+}));
+
 const Header: React.FC<HeaderProps> = ({ onLogout, userData }) => {
+  const { itemForCustom } = useStore();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [badgeInvisible, setBadgeInvisible] = useState(false);
+  const classes = useStyles();
+
+  reaction(
+    () => itemForCustom.length,
+    (arg, prev) => {
+      if (arg > prev) {
+        console.log(arg, prev);
+        setBadgeInvisible(false);
+      }
+    }
+  );
 
   return (
-    <AppBar position='static' className={styles.header}>
+    <AppBar position='static' className={classes.root}>
       <Toolbar>
         <IconButton
           onClick={() => {
             setDrawerOpen(!drawerOpen);
+            setBadgeInvisible(true);
           }}
           edge='start'
-          className={styles.menuButton}
           color='inherit'
           aria-label='menu'>
-          <MenuIcon />
+          <Badge color='secondary' variant='dot' invisible={badgeInvisible}>
+            <MenuIcon />
+          </Badge>
         </IconButton>
-        <Typography variant='h6' className={styles.title}>
-          돋보기
-        </Typography>
+        <Typography variant='h6'>돋보기</Typography>
         {userData && (
           <Button
-            className={styles.logoutBtn}
+            className={classes.logoutBtn}
             onClick={onLogout}
             color='inherit'>
             logout
@@ -51,6 +94,22 @@ const Header: React.FC<HeaderProps> = ({ onLogout, userData }) => {
           setDrawerOpen(!drawerOpen);
         }}
       />
+
+      <IconButton
+        onClick={() => {
+          setDrawerOpen(!drawerOpen);
+          setBadgeInvisible(true);
+        }}
+        className={classes.subButton}
+        aria-label='menu'>
+        <Badge
+          className={classes.badge}
+          color='secondary'
+          variant='dot'
+          invisible={badgeInvisible}>
+          <MenuIcon />
+        </Badge>
+      </IconButton>
     </AppBar>
   );
 };
