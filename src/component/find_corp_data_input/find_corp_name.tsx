@@ -43,23 +43,24 @@ const FindCorpCode = observer(() => {
   };
 
   const onSearchName = () => {
-    dispatch({
-      type: 'SEARCH_NAME',
-      pickedData: findCorpName(state.corp_name),
+    findCorpName(state.corp_name, (dataOfDB: string | null) => {
+      dispatch({
+        type: 'SEARCH_NAME',
+        corp_code: dataOfDB,
+      });
     });
   };
 
   const onSubmit = () => {
-    const { corp_name, bsns_year, reprt_code, corpData } = state;
-    const { corp_code, modify_date } = corpData as CORPCODE;
-    addFetchedCorpData({
-      id: nanoid(),
-      corp_name,
-      bsns_year,
-      reprt_code,
-      corp_code,
-      modify_date,
-    });
+    const { corp_name, bsns_year, reprt_code, corp_code } = state;
+    corp_code &&
+      addFetchedCorpData({
+        id: nanoid(),
+        corp_name,
+        bsns_year,
+        reprt_code,
+        corp_code,
+      });
   };
 
   return (
@@ -79,8 +80,8 @@ const FindCorpCode = observer(() => {
           variant='outlined'
           color='primary'
           style={{ height: '100%' }}>
-          {state.corpData ? (
-            <Zoom in={state.corpData ? true : false}>
+          {state.corp_code ? (
+            <Zoom in={state.corp_code ? true : false}>
               <CheckIcon style={{ color: 'lightgreen' }} />
             </Zoom>
           ) : (
@@ -91,8 +92,8 @@ const FindCorpCode = observer(() => {
       <Box display='flex'>
         <Box display='flex' flexDirection='column' width='50%'>
           <FormControl
-            disabled={!state.corpData}
-            variant={!state.corpData ? 'filled' : 'outlined'}>
+            disabled={!state.corp_code}
+            variant={!state.corp_code ? 'filled' : 'outlined'}>
             <InputLabel id='demo-simple-select-label'>조회년도</InputLabel>
             <Select
               label='조회년도'
@@ -108,8 +109,8 @@ const FindCorpCode = observer(() => {
             </Select>
           </FormControl>
           <FormControl
-            disabled={!state.corpData}
-            variant={!state.corpData ? 'filled' : 'outlined'}>
+            disabled={!state.corp_code}
+            variant={!state.corp_code ? 'filled' : 'outlined'}>
             <InputLabel id='demo-simple-select-label'>분기</InputLabel>
             <Select
               label='분기'
@@ -124,7 +125,7 @@ const FindCorpCode = observer(() => {
           </FormControl>
         </Box>
         <Box p='1rem' width='50%'>
-          <Zoom in={state.corpData ? true : false}>
+          <Zoom in={state.corp_code ? true : false}>
             <Button
               onClick={onSubmit}
               variant='contained'

@@ -6,7 +6,7 @@ import { firebaseDatabase } from './firebase';
 
 export function testSave(data: any) {
   firebaseDatabase //
-    .ref(`test/focusedData`)
+    .ref(`/corpcode`)
     .set(data);
 }
 
@@ -56,16 +56,11 @@ export function removeTodoData(
 
 //Performence
 
-export function findTodayData(
-  userId: string,
-  category: 'todoPerformence' | 'whatDonePerformence',
-  today: string,
-  callback: any
-) {
-  const ref = firebaseDatabase.ref(`${userId}/performence/${category}`);
+export function findCorpCodeOfDB(corp_name: string, callback: any) {
+  const ref = firebaseDatabase.ref(`/corpcode`);
   ref
     .orderByKey()
-    .equalTo(today)
+    .equalTo(corp_name)
     .on('value', (snapshot) => {
       const value = snapshot.val();
       callback(value);

@@ -1,30 +1,22 @@
 /** @format */
 
-import { fetchRepurchase, fetchStaff } from './../service/dart_api';
+/** @format */
+
+import { fetchStaff } from './../service/dart_api';
 import { nanoid } from 'nanoid';
 import {
   fetchAccountsOfFS,
   fetchMajorAccountsOfFS,
 } from './../service/dart_api';
-import { testSync } from '../service/database';
+import { findCorpCodeOfDB } from '../service/database';
 
 export function createStore() {
   return {
-    corpList: [] as CORPCODE[],
-    async setCorpList() {
-      try {
-        // const fetchedData = await fetchCORPCODE();
-        // console.log(fetchedData);
-        // this.corpList = [...fetchedData];
-
-        //FOR TEST
-        testSync((data: any) => {
-          this.focusedCorpList = data;
-        });
-        console.log('fetcj!');
-      } catch (err) {
-        console.log(err);
-      }
+    async findCorpName(corp_name: string, callback: any) {
+      await findCorpCodeOfDB(corp_name, (dataOfDB: any) => {
+        let value = dataOfDB ? Object.values(dataOfDB)[0] : null;
+        callback(value as string | null);
+      });
     },
     chosenCorpList: [] as ChosenCorpList[],
     addChosenCorpList(data: ChosenCorpList) {
@@ -33,23 +25,15 @@ export function createStore() {
     removeChosenCorpList(id: string) {
       this.chosenCorpList = this.chosenCorpList.filter((li) => li.id !== id);
     },
-    findCorpName(corp_name: string) {
-      const pick = this.corpList.find(
-        (li: CORPCODE) => li.corp_name === corp_name
-      );
-      return pick;
-    },
     async addFetchedCorpData(choiceList: ChoiseCorpList) {
       try {
         let allAccounts;
         let majorAccounts;
-        let repurchase;
         let staff;
 
         Promise.all([
           fetchAccountsOfFS(choiceList),
           fetchMajorAccountsOfFS(choiceList),
-          fetchRepurchase(choiceList),
           fetchStaff(choiceList),
         ])
           .then((data) => {
@@ -65,14 +49,12 @@ export function createStore() {
                 id: nanoid(),
               }));
             majorAccounts = data[1];
-            repurchase = data[2];
-            staff = data[3];
+            staff = data[2];
 
             const fetchedData = {
               ...choiceList,
               allAccounts,
               majorAccounts,
-              repurchase,
               staff,
             };
             this.addChosenCorpList(fetchedData);
@@ -97,6 +79,35 @@ export function createStore() {
       );
 
       return { ISdata, BSdata };
+    },
+    get fletDataOfFoucused() {
+      const { allAccounts, staff } = this.focusedCorpList;
+      const flattenAllAccounts = allAccounts?.map((list) => {
+        return {
+          name: list.account_nm,
+          amount: Number(list.thstrm_amount.split(',').join('')),
+          detail: list.account_detail === '-' ? undefined : list.account_detail,
+        };
+      });
+      const allAmountOfStaff = staff
+        ?.map((list) => {
+          const ammount =
+            list.fyer_salary_totamt === '-'
+              ? 0
+              : Number(list.fyer_salary_totamt.split(',').join(''));
+          return ammount;
+        })
+        .reduce((pre, cur) => {
+          return pre + cur;
+        });
+
+      const flattenStaff = {
+        name: '인건비',
+        amount: allAmountOfStaff ? allAmountOfStaff : 0,
+        detail: undefined,
+      };
+
+      return flattenAllAccounts?.concat(flattenStaff);
     },
     customSET: [],
     itemForCustom: [] as ItemForCustomData[],

@@ -9,11 +9,10 @@ type UserData = {
 //Store
 
 interface STORE {
-  corpList: CORPCODE[];
+  findCorpName(corp_name: string): CORPCODE;
   chosenCorpList: ChosenCorpList[];
   focusedCorpList: ChosenCorpList;
   setCorpList(): void;
-  findCorpName(corp_name: string): CORPCODE;
   addFetchedCorpData(dataForFetch: DataForFetch): void;
   setFocusedCorpList(data: ChosenCorpList | null): void;
 }
@@ -22,14 +21,12 @@ interface ChosenCorpList extends ChoiseCorpList {
   allAccounts: AccountsType[] | null;
   majorAccounts: MajorAccountsType[] | null;
   staff: StaffType[] | null;
-  repurchase: RepurChaseType[] | null;
 }
 
 //Find Corp Data input State
 type CORPCODE = {
   corp_code: string;
   corp_name: string;
-  modify_date: string;
 };
 
 type FindCorpState = {
@@ -37,12 +34,14 @@ type FindCorpState = {
   bsns_year: AccountsType['bsns_year'];
   reprt_code: AccountsType['reprt_code'];
   nameError: boolean;
-  corpData: CORPCODE | null | undefined;
+  corp_code: string | null;
+  loading: boolean;
+  succese: boolean;
 };
 
 type FindCorpAction =
   | { type: 'ON_CHANGE'; target: any }
-  | { type: 'SEARCH_NAME'; pickedData: CORPCODE | null | undefined };
+  | { type: 'SEARCH_NAME'; corp_code: any };
 
 interface DataForFetch extends CORPCODE {
   id?: string;
@@ -55,7 +54,6 @@ type ErrorDataOfFetch = [{ error: string }];
 type ChoiseCorpList = {
   id: string;
   corp_code: string;
-  modify_date: string;
   corp_name: string;
   bsns_year: string;
   reprt_code: stirng;
@@ -183,38 +181,6 @@ interface StaffType {
   fyer_salary_totamt: string;
   /**1인평균급여액*/
   jan_salary_am: string;
-  /**비고*/
-  rm: string;
-}
-
-/**자사주 매입 */
-interface RepurChaseType {
-  /** 접수번호(14자리)*/
-  rcept_no: string;
-  /**법인구분*/
-  corp_cls: string;
-  /** 고유번호*/
-  corp_code: string;
-  /** 법인명*/
-  corp_name: string;
-  /** 취득방법 대분류*/
-  acqs_mth1: string;
-  /** 취득방법 중분류*/
-  acqs_mth2: string;
-  /** 취득방법 소분류*/
-  acqs_mth3: string;
-  /** 주식종류*/
-  stock_knd: string;
-  /** 기초수량*/
-  bsis_qy: string;
-  /**변동수량 취득*/
-  change_qy_acqs: string;
-  /**변동수량 처분*/
-  change_qy_dsps: string;
-  /**변동수량 소각*/
-  change_qy_incnr: string;
-  /**기말수량*/
-  trmend_qy: string;
   /**비고*/
   rm: string;
 }

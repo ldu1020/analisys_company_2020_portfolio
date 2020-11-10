@@ -1,7 +1,6 @@
 /** @format */
 
 import {
-  Grow,
   IconButton,
   List,
   ListItem,
@@ -90,12 +89,10 @@ interface ItemProps {
 
 const Item: React.FC<ItemProps> = ({ item, clickCallBack }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
     console.log(event.currentTarget);
   };
-
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -122,6 +119,7 @@ const Item: React.FC<ItemProps> = ({ item, clickCallBack }) => {
             {clickCallBack.map((callbackList) => {
               return (
                 <MenuItem
+                  key={callbackList.role}
                   onClick={() => {
                     callbackList.function(item);
                     handleClose();

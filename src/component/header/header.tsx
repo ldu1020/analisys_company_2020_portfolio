@@ -48,13 +48,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Header: React.FC<HeaderProps> = ({ onLogout, userData }) => {
-  const { itemForCustom } = useStore();
+  const { chosenCorpList } = useStore();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [badgeInvisible, setBadgeInvisible] = useState(false);
+  const [badgeInvisible, setBadgeInvisible] = useState(true);
   const classes = useStyles();
 
   reaction(
-    () => itemForCustom.length,
+    () => chosenCorpList.length,
     (arg, prev) => {
       if (arg > prev) {
         console.log(arg, prev);

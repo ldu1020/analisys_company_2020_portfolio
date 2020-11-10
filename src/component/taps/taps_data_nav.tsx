@@ -14,8 +14,6 @@ import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import NonFetchedDataDisplay from '../non_fetched_data/non_fetched_data';
-import Repurchase from '../repurchase/repurchase';
-import ApartmentIcon from '@material-ui/icons/Apartment';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,14 +60,12 @@ const TapsDataNav = observer(() => {
           value={value}
           indicatorColor='secondary'
           textColor='secondary'
-          variant='scrollable'
-          scrollButtons='on'
+          centered
           onChange={handleChange}
           aria-label='simple tabs example'>
           <Tab icon={<AccountBalanceIcon />} label='재무제표' />
           <Tab icon={<ChangeHistoryIcon />} label='주요계정과목' />
           <Tab icon={<AssignmentIndIcon />} label='직원현황' />
-          <Tab icon={<ApartmentIcon />} label='자사주매입' />
         </Tabs>
       </Paper>
 
@@ -81,9 +77,6 @@ const TapsDataNav = observer(() => {
       </TabPanel>
       <TabPanel value={value} index={2}>
         {staff ? <Staff /> : <NonFetchedDataDisplay />}
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        {staff ? <Repurchase /> : <NonFetchedDataDisplay />}
       </TabPanel>
     </div>
   );

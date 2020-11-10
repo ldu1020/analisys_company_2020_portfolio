@@ -51,13 +51,6 @@ interface StaffCardProps {
 const StaffCard: React.FC<StaffCardProps> = ({ genderData, setData }) => {
   const { manData, womanData } = genderData;
   const classes = useStyles();
-  const keyOfData = [
-    'rgllbr_co',
-    'cnttk_co',
-    'jan_salary_am',
-    'fyer_salary_totamt',
-    'sm',
-  ];
   const dataForGraph =
     manData &&
     womanData &&
@@ -93,6 +86,14 @@ const StaffCard: React.FC<StaffCardProps> = ({ genderData, setData }) => {
     </div>
   );
 };
+
+const keyOfData = [
+  'rgllbr_co',
+  'cnttk_co',
+  'jan_salary_am',
+  'fyer_salary_totamt',
+  'sm',
+];
 
 function makeHeader(codename: string) {
   switch (codename) {

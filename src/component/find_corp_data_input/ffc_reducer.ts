@@ -5,7 +5,9 @@ export const ffc_initialState: FindCorpState = {
   bsns_year: '2019',
   reprt_code: '11011',
   nameError: false,
-  corpData: null,
+  corp_code: null,
+  loading: false,
+  succese: false,
 };
 
 export function reducer(
@@ -15,15 +17,15 @@ export function reducer(
   switch (action.type) {
     case 'ON_CHANGE':
       const { name, value } = action.target;
-      console.log(name, value);
       if (name === 'corp_name') {
-        return { ...state, [name]: value, corpData: null, nameError: false };
+        return { ...state, [name]: value, corp_code: null, nameError: false };
       } else {
         return { ...state, [name]: value };
       }
     case 'SEARCH_NAME':
-      if (action.pickedData) {
-        return { ...state, corpData: action.pickedData, nameError: false };
+      console.log(action.corp_code);
+      if (action.corp_code) {
+        return { ...state, corp_code: action.corp_code, nameError: false };
       } else {
         return { ...state, nameError: true };
       }
