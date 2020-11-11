@@ -1,8 +1,18 @@
 /** @format */
 
-import { TextField } from '@material-ui/core';
+import {
+  Box,
+  Card,
+  makeStyles,
+  Paper,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
+import { useLocalObservable } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
+import CountUp from 'react-countup';
+import CalcCard from './calc_card';
 
 interface CalculatorComponentProps {
   flatDataOfFocused: FlatData[];
@@ -10,11 +20,28 @@ interface CalculatorComponentProps {
   division?: string[];
 }
 
+const useStyles = makeStyles((theme) => ({
+  title: {
+    magin: '0.5rem',
+    textAlign: 'center',
+    fontSize: '1rem',
+    color: theme.palette.text.secondary,
+  },
+  result: {
+    position: 'absolute',
+    top: '0',
+    right: '0',
+    fontSize: '1.5rem',
+    color: theme.palette.primary.light,
+  },
+}));
+
 const CalculatorComponent: React.FC<CalculatorComponentProps> = ({
   flatDataOfFocused,
   plus,
   division,
 }) => {
+  const classes = useStyles();
   const [result, setresult] = useState(0);
   const [plusState, setplusState] = useState<FlatData[]>(
     plus.map((plusItem) => {
@@ -48,59 +75,41 @@ const CalculatorComponent: React.FC<CalculatorComponentProps> = ({
   }, [plusState, divisionState]);
 
   return (
-    <div>
-      <div>
-        <p>더하기존</p>
-        {plusState.map((li, index) => (
-          <div>
-            <Autocomplete
-              id='combo-box-demo'
-              options={flatDataOfFocused}
-              getOptionLabel={(option) => option.name}
-              onChange={(event, value) => {
-                if (value && value.amount) {
-                  const update = [...plusState];
-                  update[index] = value as FlatData;
-                  setplusState(update);
-                }
-              }}
-              value={li}
-              renderInput={(params) => (
-                <TextField {...params} variant='standard' />
-              )}
-            />
-            <p>{li.amount}</p>
-          </div>
-        ))}
-      </div>
+    <>
+      <CountUp className={classes.result} end={result} suffix=' %' />
+      <Box p={1} boxShadow={2}>
+        <CalcCard
+          state={plusState}
+          flatDataOfFocused={flatDataOfFocused}
+          updateState={setplusState}
+        />
+        {divisionState && (
+          <CalcCard
+            state={divisionState}
+            flatDataOfFocused={flatDataOfFocused}
+            updateState={setdivisionState}
+          />
+        )}
 
-      <div>
-        {divisionState?.map((li, index) => (
-          <div>
-            <p>나누기존</p>
-            <Autocomplete
-              id='combo-box-demo'
-              options={flatDataOfFocused}
-              getOptionLabel={(option) => option.name}
-              onChange={(event, value) => {
-                if (value && value.amount) {
-                  const update = [...divisionState];
-                  update[index] = value as FlatData;
-                  setdivisionState(update);
-                }
-              }}
-              value={li}
-              renderInput={(params) => (
-                <TextField {...params} variant='standard' />
-              )}
-            />
-            <p>{li.amount}</p>
-          </div>
-        ))}
-      </div>
-
-      <p>결과 : {result}</p>
-    </div>
+        <Typography align='center' variant='subtitle1'>
+          <span>
+            {plusState.length === 1
+              ? plusState[0].amount
+              : `(${plusState.map((li) => li.amount).join('+')})`}
+          </span>
+          {divisionState && (
+            <>
+              <span> ÷ </span>
+              <span>
+                {divisionState.length === 1
+                  ? divisionState[0].amount
+                  : `(${divisionState.map((li) => li.amount).join('+')})`}
+              </span>
+            </>
+          )}
+        </Typography>
+      </Box>
+    </>
   );
 };
 
