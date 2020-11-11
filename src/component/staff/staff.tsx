@@ -18,12 +18,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Staff = observer(() => {
-  const { focusedCorpList, fletDataOfFoucused } = useStore();
+  const { focusedCorpList } = useStore();
   const { staff } = focusedCorpList;
   const classes = useStyles();
   const state = useLocalObservable(staffState);
-
-  console.log(fletDataOfFoucused);
 
   const staffHeader = Array.from(
     new Set((staff as StaffType[]).map((li) => li.fo_bbm))

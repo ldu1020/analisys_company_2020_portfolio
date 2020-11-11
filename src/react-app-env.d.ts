@@ -15,7 +15,22 @@ interface STORE {
   setCorpList(): void;
   addFetchedCorpData(dataForFetch: DataForFetch): void;
   setFocusedCorpList(data: ChosenCorpList | null): void;
+  flatDataOfFocused(): FlatData[];
 }
+
+type FlatData = {
+  name: string;
+  amount: number;
+  detail?: string;
+};
+
+type ChoiseCorpList = {
+  id: string;
+  corp_code: string;
+  corp_name: string;
+  bsns_year: string;
+  reprt_code: stirng;
+};
 
 interface ChosenCorpList extends ChoiseCorpList {
   allAccounts: AccountsType[] | null;
@@ -50,14 +65,6 @@ interface DataForFetch extends CORPCODE {
 }
 
 type ErrorDataOfFetch = [{ error: string }];
-
-type ChoiseCorpList = {
-  id: string;
-  corp_code: string;
-  corp_name: string;
-  bsns_year: string;
-  reprt_code: stirng;
-};
 
 type FsFilterType = 'IS' | 'BS';
 

@@ -80,7 +80,7 @@ export function createStore() {
 
       return { ISdata, BSdata };
     },
-    get fletDataOfFoucused() {
+    get flatDataOfFocused() {
       const { allAccounts, staff } = this.focusedCorpList;
       const flattenAllAccounts = allAccounts?.map((list) => {
         return {
