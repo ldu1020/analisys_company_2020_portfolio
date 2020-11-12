@@ -91,23 +91,23 @@ const StaffCard: React.FC<StaffCardProps> = ({ genderData, setData }) => {
 const keyOfData = [
   'rgllbr_co',
   'cnttk_co',
+  'sm',
   'jan_salary_am',
   'fyer_salary_totamt',
-  'sm',
 ];
 
 function makeHeader(codename: string) {
   switch (codename) {
     case 'rgllbr_co':
-      return '정직원 수';
+      return '정직원 수(명)';
     case 'cnttk_co':
-      return ' 계약직 수';
-    case 'jan_salary_am':
-      return '1인평균급여액';
-    case 'fyer_salary_totamt':
-      return '연간급여총액';
+      return ' 계약직 수(명)';
     case 'sm':
-      return '합계';
+      return '총 직원 수(명)';
+    case 'jan_salary_am':
+      return '1인평균급여액(원)';
+    case 'fyer_salary_totamt':
+      return '연간급여총액(원)';
   }
 }
 

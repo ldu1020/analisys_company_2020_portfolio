@@ -14,6 +14,11 @@ const useStyles = makeStyles((theme) => ({
   eachCard: {
     display: 'flex',
   },
+  subHeader: {
+    marginBottom: '0.5rem',
+    textAlign: 'center',
+    fontSize: '1rem',
+  },
   cardHeader: {},
 }));
 
@@ -37,6 +42,7 @@ const Staff = observer(() => {
   return (
     <div className={classes.root}>
       <StaffGraph dataForGraph={state.dataForGraph} eachRate={state.eachRate} />
+      <p className={classes.subHeader}>사업부문</p>
       <Tabs
         value={state.navValue}
         onChange={(e, value) => {

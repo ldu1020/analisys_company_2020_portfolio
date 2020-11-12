@@ -1,8 +1,16 @@
 /** @format */
 
-import { Box, Card, List, ListItem, ListItemText } from '@material-ui/core';
+import {
+  Box,
+  Card,
+  List,
+  ListItem,
+  ListItemText,
+  makeStyles,
+} from '@material-ui/core';
 import { observer } from 'mobx-react';
 import React from 'react';
+import CountUp from 'react-countup';
 
 export interface AccountsListProps {
   majorAccount: AccountsType[];
@@ -10,13 +18,33 @@ export interface AccountsListProps {
   pickAccount: any;
 }
 
+const useStyles = makeStyles((theme) => ({
+  rateBox: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  rate: {
+    textAlign: 'end',
+    fontSize: '1.2rem',
+    color: theme.palette.primary.light,
+  },
+  cycleRate: {
+    textAlign: 'end',
+    fontSize: '0.7rem',
+    color: theme.palette.text.secondary,
+    margin: '0.3rem',
+  },
+}));
+
 const AccountsList: React.FC<AccountsListProps> = observer(
   ({ majorAccount, baseAmount, pickAccount }) => {
+    const classes = useStyles();
     return (
       <Card>
         <List>
           <Box>
-            {majorAccount.map((li) => {
+            {majorAccount.map((li, index) => {
               return (
                 <ListItem
                   button
@@ -29,11 +57,18 @@ const AccountsList: React.FC<AccountsListProps> = observer(
                     secondary={li.thstrm_amount}
                   />
                   {baseAmount && (
-                    <ListItemText
-                      primary={`${getRate(baseAmount, li.thstrm_amount)}% ${
-                        getRate(baseAmount, li.thstrm_amount) / 100
-                      }회전`}
-                    />
+                    <div className={classes.rateBox}>
+                      <CountUp
+                        className={classes.rate}
+                        end={getRate(baseAmount, li.thstrm_amount)}
+                        duration={index ? index * 0.7 : 0.7}
+                        suffix='%'
+                      />
+                      <p className={classes.cycleRate}>
+                        {getRate(baseAmount, li.thstrm_amount) / 100}
+                        회전
+                      </p>
+                    </div>
                   )}
                 </ListItem>
               );
