@@ -22,6 +22,7 @@ type FlatData = {
   name: string;
   amount: number;
   detail?: string;
+  minus?: boolean;
 };
 
 type ChoiseCorpList = {

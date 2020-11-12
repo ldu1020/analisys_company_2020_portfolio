@@ -1,21 +1,20 @@
 /** @format */
 
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
-  Card,
   makeStyles,
-  Paper,
-  TextField,
-  Typography,
 } from '@material-ui/core';
-import { Autocomplete } from '@material-ui/lab';
-import { useLocalObservable } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import CountUp from 'react-countup';
 import CalcCard from './calc_card';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 interface CalculatorComponentProps {
   flatDataOfFocused: FlatData[];
+  description: string;
   plus: string[];
   division?: string[];
 }
@@ -27,16 +26,24 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '1rem',
     color: theme.palette.text.secondary,
   },
+  basis: {
+    color: theme.palette.text.secondary,
+  },
   result: {
     position: 'absolute',
-    top: '0',
-    right: '0',
+    top: '1rem',
+    right: '1rem',
     fontSize: '1.5rem',
     color: theme.palette.primary.light,
+  },
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
   },
 }));
 
 const CalculatorComponent: React.FC<CalculatorComponentProps> = ({
+  description,
   flatDataOfFocused,
   plus,
   division,
@@ -46,69 +53,124 @@ const CalculatorComponent: React.FC<CalculatorComponentProps> = ({
   const [plusState, setplusState] = useState<FlatData[]>(
     plus.map((plusItem) => {
       const inList = flatDataOfFocused.find((flatItem) =>
-        (flatItem.name + flatItem.detail).includes(plusItem)
+        plusItem[0] === '-'
+          ? (flatItem.name + flatItem.detail).includes(plusItem.slice(1))
+          : (flatItem.name + flatItem.detail).includes(plusItem)
       );
-      return inList ? inList : { name: '조회실패', amount: 0 };
+      if (!inList) {
+        return { name: '조회실패', amount: 0 };
+      }
+      return plusItem[0] === '-'
+        ? {
+            name: inList.name,
+            detail: inList.detail,
+            amount: inList.amount,
+            minus: true,
+          }
+        : inList;
     })
   );
   const [divisionState, setdivisionState] = useState<FlatData[] | null>(
     division
       ? division.map((divisionItem) => {
           const inList = flatDataOfFocused.find((flatItem) =>
-            (flatItem.name + flatItem.detail).includes(divisionItem)
+            divisionItem[0] === '-'
+              ? (flatItem.name + flatItem.detail).includes(
+                  divisionItem.slice(1)
+                )
+              : (flatItem.name + flatItem.detail).includes(divisionItem)
           );
-          return inList ? inList : { name: '조회실패', amount: 1 };
+          if (!inList) {
+            return { name: '조회실패', amount: 0 };
+          }
+          return divisionItem[0] === '-'
+            ? {
+                name: inList.name,
+                detail: inList.detail,
+                amount: inList.amount,
+                minus: true,
+              }
+            : inList;
         })
       : null
   );
 
   useEffect(() => {
     const molecular = plusState
-      .map((li) => li.amount)
+      .map((li) => (li.minus ? li.amount * -1 : li.amount))
       .reduce((pre, cur) => pre + cur);
     const denominator = divisionState
-      ?.map((li) => li.amount)
+      ?.map((li) => (li.minus ? li.amount * -1 : li.amount))
       .reduce((pre, cur) => pre + cur);
-    denominator
+    molecular && denominator
       ? setresult(Math.floor((molecular / denominator) * 100))
-      : setresult(molecular);
+      : setresult(0);
   }, [plusState, divisionState]);
 
   return (
     <>
       <CountUp className={classes.result} end={result} suffix=' %' />
-      <Box p={1} boxShadow={2}>
-        <CalcCard
-          state={plusState}
-          flatDataOfFocused={flatDataOfFocused}
-          updateState={setplusState}
-        />
-        {divisionState && (
-          <CalcCard
-            state={divisionState}
-            flatDataOfFocused={flatDataOfFocused}
-            updateState={setdivisionState}
-          />
-        )}
-
-        <Typography align='center' variant='subtitle1'>
-          <span>
-            {plusState.length === 1
-              ? plusState[0].amount
-              : `(${plusState.map((li) => li.amount).join('+')})`}
-          </span>
-          {divisionState && (
-            <>
-              <span> ÷ </span>
-              <span>
-                {divisionState.length === 1
-                  ? divisionState[0].amount
-                  : `(${divisionState.map((li) => li.amount).join('+')})`}
-              </span>
-            </>
-          )}
-        </Typography>
-      </Box>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls='panel1a-content'
+          id='panel1a-header'>
+          <div className={classes.basis}>
+            {result ? (
+              <>
+                <span>
+                  {plusState.length === 1
+                    ? plusState[0].minus
+                      ? plusState[0].amount * -1
+                      : plusState[0].amount
+                    : `(${plusState
+                        .map((li) => (li.minus ? li.amount * -1 : li.amount))
+                        .join('+')})`}
+                </span>
+                {divisionState && (
+                  <>
+                    <span> ÷ </span>
+                    <span>
+                      {divisionState.length === 1
+                        ? divisionState[0].minus
+                          ? divisionState[0].amount * -1
+                          : divisionState[0].amount
+                        : `(${divisionState
+                            .map((li) =>
+                              li.minus ? li.amount * -1 : li.amount
+                            )
+                            .join('+')})`}
+                    </span>
+                  </>
+                )}
+              </>
+            ) : (
+              <p>조회되지 않은 값이 있습니다.</p>
+            )}
+          </div>
+        </AccordionSummary>
+        <AccordionDetails className={classes.details}>
+          <p>{description}</p>
+          <Box p={1} boxShadow={2}>
+            <p className={classes.title}>분자</p>
+            <CalcCard
+              state={plusState}
+              flatDataOfFocused={flatDataOfFocused}
+              updateState={setplusState}
+            />
+            {divisionState && (
+              <>
+                <p className={classes.title}>분모</p>
+                <CalcCard
+                  state={divisionState}
+                  flatDataOfFocused={flatDataOfFocused}
+                  updateState={setdivisionState}
+                />
+              </>
+            )}
+          </Box>
+        </AccordionDetails>
+      </Accordion>
     </>
   );
 };

@@ -1,47 +1,71 @@
 /** @format */
 
-import { Box, makeStyles } from '@material-ui/core';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  makeStyles,
+} from '@material-ui/core';
 import { observer } from 'mobx-react';
 import React from 'react';
 import { useStore } from '../../stores/setUpContext';
+import NonFetchedDataDisplay from '../non_fetched_data/non_fetched_data';
 import CalculatorComponent from './calculator_component';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles((theme) => ({
   analisysSet: {
     position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
   },
 }));
 
 const dataSet = [
   {
     title: 'ROIC',
-    description: '',
+    basis: '영업이익 / 투하자본 (유형자산 + 운전자본 ) ',
+    description:
+      '투하자본 수익률로써, 투하자본이 적고 영업이익이 높을수록 긍정적이며, 다년간의 자료를 분석해 보면 좋습니다.',
     plus: ['영업이익'],
-    division: ['유형자산,운전자본'],
+    division: ['유형자산', '매출채권', '-매입채무'],
   },
   {
     title: 'ROE',
-    description: '',
+    basis: '당기순이익 / 자본총액',
+    description:
+      '부채를 포함하지 않은 본인의 자본으로써 얻은 수익률지표로, 이 또한 높을 수록 긍정적이며 투자의 대가 워런버핏은 3년연속 15%이상인 기업에 투자하라 말한바도 있습니다.  ',
     plus: ['당기순이익'],
-    division: ['자본금'],
+    division: ['자본총계'],
   },
   {
     title: '유동비율',
-    description: '',
+    basis: '유동자산 / 유동부채',
+    description:
+      '재무재표상에서 유동성은이란 1년이내 현금화 할수 있는 가로 판단합니다.  단기 채무상환 능력을 평가할 수 있으며 수익성이 높아도 유동성이 좋지않으면  흑자도산의 위험이 있기에 기본적이면서도 중요한 지표입니다. ',
     plus: ['유동자산'],
     division: ['유동부채'],
   },
   {
     title: '고정자산회전률',
-    description: '',
+    basis: '매출액 / 고정자산',
+    description:
+      '고정자산에 투하된 자금은 장기간에 걸쳐 묶이기 때문에 효율적으로 운용되지않으면 현금흐름도 악화됩니다. 특히 그 비용이 높은 대기업에서 중요한 지표가 됩니다. 수치가 업계마다 상이해서 동종업계 평균치와 비교해보는것이 좋습니다.',
     plus: ['매출액'],
     division: ['고정자산'],
   },
   {
     title: '노동분배율',
-    description: '',
+    basis: '인건비 / 부가가치',
+    description:
+      '노동분배율은 기업의 보상수준과 노동 효율성등을 나타내는 지표입니다.  낮을 수록 효율적임을 뜻하지만 분석의도에따라 긍정부정은 달라질 수 있습니다. 부가가치의 산출근거는 편의를 위해 영업이익 + 인건비로 측정했습니다. ',
     plus: ['인건비'],
-    division: ['매출액'],
+    division: ['인건비', '영업이익'],
   },
 ];
 const AnalisysOfAccounts = observer(() => {
@@ -52,13 +76,27 @@ const AnalisysOfAccounts = observer(() => {
       {dataSet.map((data) => (
         <div className={classes.analisysSet}>
           <h1>{data.title}</h1>
-          <p>{data.description}</p>
-          {flatDataOfFocused && (
+          <p>{data.basis}</p>
+
+          {flatDataOfFocused ? (
             <CalculatorComponent
               flatDataOfFocused={flatDataOfFocused}
+              description={data.description}
               plus={data.plus}
               division={data.division}
             />
+          ) : (
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls='panel1a-content'
+                id='panel1a-header'>
+                데이터를 검색해 주세요
+              </AccordionSummary>
+              <AccordionDetails className={classes.details}>
+                <NonFetchedDataDisplay />
+              </AccordionDetails>
+            </Accordion>
           )}
         </div>
       ))}

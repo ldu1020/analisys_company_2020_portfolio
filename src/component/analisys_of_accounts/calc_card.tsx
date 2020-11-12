@@ -1,34 +1,36 @@
 /** @format */
 
-import { Card, makeStyles, TextField } from '@material-ui/core';
+import {
+  Card,
+  Checkbox,
+  FormControlLabel,
+  makeStyles,
+  TextField,
+} from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
-  title: {
-    magin: '0.5rem',
-    textAlign: 'center',
-    fontSize: '1rem',
-    color: theme.palette.text.secondary,
-  },
   card: {
     padding: '1rem',
     marginBottom: '1rem',
   },
+  listBelow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   eachAmount: {
     color: theme.palette.text.secondary,
   },
-  result: {
-    position: 'absolute',
-    top: '0',
-    right: '5rem',
-    fontSize: '1.3rem',
-    color: theme.palette.primary.light,
+  checkboxLabel: {
+    fontSize: '0.5rem',
+    color: theme.palette.secondary.light,
   },
 }));
 
 interface CalcCardProps {
-  state: any[];
+  state: FlatData[];
   flatDataOfFocused: any;
   updateState: any;
 }
@@ -41,13 +43,14 @@ const CalcCard: React.FC<CalcCardProps> = ({
   const classes = useStyles();
   return (
     <Card className={classes.card} variant='outlined'>
-      <p className={classes.title}>분자</p>
       {state.map((li, index) => (
         <div>
           <Autocomplete
             id='combo-box-demo'
             options={flatDataOfFocused}
-            getOptionLabel={(option) => option.name}
+            getOptionLabel={(option) =>
+              `${option.name}${option.detail ? '-' + option.detail : ''}`
+            }
             onChange={(event, value) => {
               if (value && value.amount) {
                 const update = [...state];
@@ -60,7 +63,24 @@ const CalcCard: React.FC<CalcCardProps> = ({
               <TextField {...params} variant='standard' />
             )}
           />
-          <p className={classes.eachAmount}>{li.amount}</p>
+          <div className={classes.listBelow}>
+            <p className={classes.eachAmount}>{li.amount}</p>
+            <FormControlLabel
+              classes={{ label: classes.checkboxLabel }}
+              control={
+                <Checkbox
+                  checked={Boolean(li.minus)}
+                  onChange={() => {
+                    const update = [...state];
+                    update[index].minus = !update[index].minus;
+                    updateState(update);
+                  }}
+                />
+              }
+              label='minus?'
+              labelPlacement='start'
+            />
+          </div>
         </div>
       ))}
     </Card>
