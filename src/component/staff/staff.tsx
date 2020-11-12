@@ -47,7 +47,7 @@ const Staff = observer(() => {
         variant='scrollable'
         scrollButtons='on'>
         {staffHeader.map((header, index) => (
-          <Tab label={header} value={index} />
+          <Tab key={header} label={header} value={index} />
         ))}
       </Tabs>
       {

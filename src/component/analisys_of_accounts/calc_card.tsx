@@ -44,7 +44,7 @@ const CalcCard: React.FC<CalcCardProps> = ({
   return (
     <Card className={classes.card} variant='outlined'>
       {state.map((li, index) => (
-        <div>
+        <div key={li.name + li.detail}>
           <Autocomplete
             id='combo-box-demo'
             options={flatDataOfFocused}

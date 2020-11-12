@@ -21,6 +21,12 @@ const useStyles = makeStyles((theme) => ({
     top: '0',
     zIndex: theme.zIndex.appBar,
   },
+  title: {
+    fontWeight: theme.typography.fontWeightMedium,
+  },
+  description: {
+    color: theme.palette.text.secondary,
+  },
 }));
 
 interface TabPanelProps {
@@ -70,12 +76,30 @@ const TapsDataNav = observer(() => {
       </Paper>
 
       <TabPanel value={value} index={0}>
+        <Box>
+          <h1 className={classes.title}>재무재표</h1>
+          <p className={classes.description}>
+            계정과목을 선택 해 주세요!
+            <br /> 현재시점을 마지막분기로 최대 3분기까지 그래프를 통해 조회 할
+            수 있습니다
+          </p>
+        </Box>
         {allAccounts ? <AllAccounts /> : <NonFetchedDataDisplay />}
       </TabPanel>
       <TabPanel value={value} index={1}>
+        <h1 className={classes.title}>주요계정과목</h1>
+        <p className={classes.description}>
+          손익계산서와 대차대조표의 '핵심'
+          <br />각 계정과목을 선택 해 보세요! 간단한 분석이 가능합니다.
+        </p>
         {majorAccounts ? <AllMajorAccounts /> : <NonFetchedDataDisplay />}
       </TabPanel>
       <TabPanel value={value} index={2}>
+        <h1 className={classes.title}>직원 현황</h1>
+        <p className={classes.description}>
+          각 사업부분의 인원과 급여를 알 수 있습니다.
+          <br />각 항목을 '클릭'하여 가시적으로 조회가 가능합니다.
+        </p>
         {staff ? <Staff /> : <NonFetchedDataDisplay />}
       </TabPanel>
     </div>

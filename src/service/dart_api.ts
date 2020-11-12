@@ -22,7 +22,9 @@ export const fetchCORPCODE = async () => {
 
     return CORPCODE;
   } catch (err) {
-    console.log(err);
+    alert(
+      `데이터를 불러오지 못했습니다. 오류가 계속 될 시 dart api 홈페이지를 방문 해 보세요`
+    );
   }
 };
 
@@ -34,7 +36,9 @@ export const fetchAccountsOfFS = async (choiceCorpList: ChoiseCorpList) => {
     const MajorOfFS = await axios.get(MajorOfFsAPI);
     return MajorOfFS;
   } catch (err) {
-    console.log(err);
+    alert(
+      `재무제표 데이터를 불러오지 못했습니다. 오류가 계속 될 시 dart api 홈페이지를 방문 해 보세요`
+    );
   }
 };
 
@@ -49,7 +53,9 @@ export const fetchMajorAccountsOfFS = async (
     const MajorOfFS = await axios.get(MajorOfFsAPI);
     return MajorOfFS;
   } catch (err) {
-    console.log(err);
+    alert(
+      `주요 계정과목 데이터를 불러오지 못했습니다. 오류가 계속 될 시 dart api 홈페이지를 방문 해 보세요`
+    );
   }
 };
 
@@ -62,7 +68,9 @@ export const fetchRepurchase = async (choiceCorpList: ChoiseCorpList) => {
     const Repurchase = await axios.get(RepurchaseAPI);
     return Repurchase;
   } catch (err) {
-    console.log(err);
+    alert(
+      ` 데이터를 불러오지 못했습니다. 오류가 계속 될 시 dart api 홈페이지를 방문 해 보세요`
+    );
   }
 };
 
@@ -75,7 +83,9 @@ export const fetchStaff = async (choiceCorpList: ChoiseCorpList) => {
     const Staff = await axios.get(StaffAPI);
     return Staff;
   } catch (err) {
-    console.log(err);
+    alert(
+      `직원 현황 데이터를 불러오지 못했습니다. 오류가 계속 될 시 dart api 홈페이지를 방문 해 보세요`
+    );
   }
 };
 

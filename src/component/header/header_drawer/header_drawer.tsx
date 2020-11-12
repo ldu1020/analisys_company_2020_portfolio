@@ -43,6 +43,7 @@ const HeaderDrawer: React.FC<HeaderDrawerProps> = ({ open, toggleOpen }) => {
           </ListItem>
           {chosenCorpList.map((item) => (
             <ListItem
+              key={item.id}
               className={styles.item}
               onClick={() => {
                 toggleOpen();

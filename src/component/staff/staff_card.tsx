@@ -65,6 +65,7 @@ const StaffCard: React.FC<StaffCardProps> = ({ genderData, setData }) => {
         {dataForGraph &&
           dataForGraph.map((data) => (
             <ListItem
+              key={data.subHeader}
               className={classes.item}
               button
               onClick={() => {

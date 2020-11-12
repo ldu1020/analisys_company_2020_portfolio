@@ -19,6 +19,17 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
+    marginBottom: '1rem',
+  },
+  title: {
+    fontWeight: theme.typography.fontWeightMedium,
+  },
+  description: {
+    color: theme.palette.text.secondary,
+  },
+  nameOfAnalisys: {
+    fontSize: '1.5rem',
+    margin: '0',
   },
   details: {
     display: 'flex',
@@ -73,9 +84,18 @@ const AnalisysOfAccounts = observer(() => {
   const classes = useStyles();
   return (
     <Box p={3}>
+      <h1 className={classes.title}>분석</h1>
+      <p className={classes.description}>
+        각 항목은 주요한 분석지표입니다
+        <br /> 데이터가 기업마다 상이할 수 있어, <br />
+        기본적으로 제공하는 데이터가 '조회 불가' 일 경우에
+        <br />
+        직접 계정과목을 선택해서 원하는 정보를 알아내세요! <br />
+        간단한 검색도 가능합니다.
+      </p>
       {dataSet.map((data) => (
-        <div className={classes.analisysSet}>
-          <h1>{data.title}</h1>
+        <div key={data.title} className={classes.analisysSet}>
+          <p className={classes.nameOfAnalisys}>{data.title}</p>
           <p>{data.basis}</p>
 
           {flatDataOfFocused ? (

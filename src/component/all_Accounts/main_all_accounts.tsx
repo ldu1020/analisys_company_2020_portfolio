@@ -14,9 +14,10 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
   },
+
   accountCard: {
     width: '100%',
-    paddingBottom: '1rem',
+    marginBottom: '1rem',
   },
   downIcon: {
     boxShadow: theme.shadows['1'],

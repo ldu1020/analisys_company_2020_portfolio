@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core';
 import { observer } from 'mobx-react';
 import React, { useState } from 'react';
+import NonFetchedDataDisplay from '../non_fetched_data/non_fetched_data';
 import ChartOfAccounts from './chart_of_account';
 
 interface AccountsPickerProps {
@@ -27,7 +28,13 @@ const AccountsPicker: React.FC<AccountsPickerProps> = observer(
     };
 
     return (
-      <Box display='flex' flexDirection='column' alignItems='center'>
+      <Box
+        display='flex'
+        flexDirection='column'
+        justifyContent='space-evenly'
+        alignItems='center'
+        width='100%'
+        height='20rem'>
         <FormControl>
           <InputLabel>계정과목분석</InputLabel>
           <Select
@@ -48,7 +55,13 @@ const AccountsPicker: React.FC<AccountsPickerProps> = observer(
             })}
           </Select>
         </FormControl>
-        <ChartOfAccounts pickedItem={pickedItem} />
+        {pickedItem ? (
+          <ChartOfAccounts pickedItem={pickedItem} />
+        ) : (
+          <Box width='100%'>
+            <NonFetchedDataDisplay />
+          </Box>
+        )}
       </Box>
     );
   }

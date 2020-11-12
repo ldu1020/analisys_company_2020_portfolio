@@ -5,9 +5,9 @@ import {
   Button,
   FormControl,
   InputLabel,
+  makeStyles,
   MenuItem,
   Select,
-  styled,
   TextField,
   Typography,
   Zoom,
@@ -21,18 +21,29 @@ import { ffc_initialState, reducer } from './ffc_reducer';
 import { nanoid } from 'nanoid';
 import { observer } from 'mobx-react';
 
-const StyledSection = styled('section')({
-  component: 'section',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'space-evenly',
-  padding: '1rem',
-  height: '25rem',
-});
+const useStyles = makeStyles((theme) => ({
+  root: {
+    component: 'section',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    padding: '1rem',
+    height: '25rem',
+  },
+  corpName: {
+    height: '100%',
+    width: '70%',
+  },
+  nameSubmit: {
+    height: '100%',
+    width: '30%',
+  },
+}));
 
 const FindCorpCode = observer(() => {
   const { findCorpName, addFetchedCorpData } = useStore();
   const [state, dispatch] = useReducer(reducer, ffc_initialState);
+  const classes = useStyles();
 
   const onChange = (e: any) => {
     console.log(e.target.value);
@@ -64,10 +75,11 @@ const FindCorpCode = observer(() => {
   };
 
   return (
-    <StyledSection>
+    <div className={classes.root}>
       <Typography variant='h5'>SEARCH</Typography>
       <Box component='div' display='flex' width='100%'>
         <TextField
+          className={classes.corpName}
           label='회사이름'
           name='corp_name'
           error={state.nameError}
@@ -76,10 +88,10 @@ const FindCorpCode = observer(() => {
           variant='outlined'
         />
         <Button
+          className={classes.nameSubmit}
           onClick={onSearchName}
           variant='outlined'
-          color='primary'
-          style={{ height: '100%' }}>
+          color='primary'>
           {state.corp_code ? (
             <Zoom in={state.corp_code ? true : false}>
               <CheckIcon style={{ color: 'lightgreen' }} />
@@ -136,7 +148,7 @@ const FindCorpCode = observer(() => {
           </Zoom>
         </Box>
       </Box>
-    </StyledSection>
+    </div>
   );
 });
 
