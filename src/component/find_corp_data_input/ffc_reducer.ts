@@ -4,10 +4,8 @@ export const ffc_initialState: FindCorpState = {
   corp_name: '',
   bsns_year: '2019',
   reprt_code: '11011',
-  nameError: false,
   corp_code: null,
-  loading: false,
-  succese: false,
+  nameError: false,
 };
 
 export function reducer(
@@ -24,6 +22,7 @@ export function reducer(
       }
     case 'SEARCH_NAME':
       console.log(action.corp_code);
+
       if (action.corp_code) {
         return { ...state, corp_code: action.corp_code, nameError: false };
       } else {

@@ -80,10 +80,11 @@ const dataSet = [
   },
 ];
 const AnalisysOfAccounts = observer(() => {
-  const { flatDataOfFocused } = useStore();
+  const { flatDataOfFocused, focusedCorpList } = useStore();
   const classes = useStyles();
   return (
     <Box p={3}>
+      <h1>현재회사: {focusedCorpList.corp_name}</h1>
       <h1 className={classes.title}>분석</h1>
       <p className={classes.description}>
         각 항목은 주요한 분석지표입니다
@@ -100,7 +101,6 @@ const AnalisysOfAccounts = observer(() => {
 
           {flatDataOfFocused ? (
             <CalculatorComponent
-              flatDataOfFocused={flatDataOfFocused}
               description={data.description}
               plus={data.plus}
               division={data.division}

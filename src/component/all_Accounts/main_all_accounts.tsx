@@ -7,6 +7,7 @@ import { useStore } from '../../stores/setUpContext';
 import Account from './account';
 import AccountsPicker from './accounts_picker';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { reaction } from 'mobx';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,8 +31,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AllAccounts = observer(() => {
-  const { focusedCorpList, addItemForCustom } = useStore();
-  const { allAccounts } = focusedCorpList as ChosenCorpList;
+  const rootStore = useStore();
+  const { allAccounts } = rootStore.focusedCorpList as ChosenCorpList;
   const classes = useStyles();
 
   const AccountsStore = useLocalObservable(() => ({
@@ -47,15 +48,16 @@ const AllAccounts = observer(() => {
       const index = this.chosenAccounts.indexOf(item);
       this.chosenAccounts.splice(index, 1);
     },
-    onAddForCustom(item: AccountsType) {
-      const name = item.account_nm;
-      const detail =
-        item.account_detail === '-' ? undefined : item.account_detail;
-      const amount = item.thstrm_amount;
-      addItemForCustom({ name, amount, detail });
-    },
   }));
 
+  reaction(
+    () => rootStore.focusedCorpList,
+    (arg, pre) => {
+      if (arg !== pre) {
+        AccountsStore.onReset();
+      }
+    }
+  );
   return (
     <Box className={classes.root}>
       <p>ALL</p>
@@ -72,7 +74,12 @@ const AllAccounts = observer(() => {
           fsList={AccountsStore.chosenAccounts}
           clickCallBack={[
             { role: '제거하기', function: AccountsStore.onReomveList },
-            { role: '커스텀등록', function: AccountsStore.onAddForCustom },
+            {
+              role: '커스텀등록',
+              function: () => {
+                alert('준비 중입니다.');
+              },
+            },
           ]}
         />
       </Card>

@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface CalcCardProps {
   state: FlatData[];
-  flatDataOfFocused: any;
+  flatDataOfFocused: FlatData[];
   updateState: any;
 }
 
@@ -41,12 +41,12 @@ const CalcCard: React.FC<CalcCardProps> = ({
   updateState,
 }) => {
   const classes = useStyles();
+
   return (
     <Card className={classes.card} variant='outlined'>
       {state.map((li, index) => (
         <div key={li.name + li.detail}>
           <Autocomplete
-            id='combo-box-demo'
             options={flatDataOfFocused}
             getOptionLabel={(option) =>
               `${option.name}${option.detail ? '-' + option.detail : ''}`

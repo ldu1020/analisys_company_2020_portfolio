@@ -27,11 +27,13 @@ export function createStore() {
     },
     async addFetchedCorpData(choiceList: ChoiseCorpList) {
       try {
+        this.fetchLoading = true;
+
         let allAccounts;
         let majorAccounts;
         let staff;
 
-        Promise.all([
+        await Promise.all([
           fetchAccountsOfFS(choiceList),
           fetchMajorAccountsOfFS(choiceList),
           fetchStaff(choiceList),
@@ -60,10 +62,13 @@ export function createStore() {
             this.addChosenCorpList(fetchedData);
             this.setFocusedCorpList(fetchedData);
           });
+        this.fetchLoading = false;
       } catch (err) {
         console.log(err);
+        this.fetchLoading = false;
       }
     },
+    fetchLoading: false,
     focusedCorpList: {} as ChosenCorpList,
     setFocusedCorpList(data: ChosenCorpList) {
       this.focusedCorpList = data;
@@ -87,6 +92,7 @@ export function createStore() {
           name: list.account_nm,
           amount: Number(list.thstrm_amount.split(',').join('')),
           detail: list.account_detail === '-' ? undefined : list.account_detail,
+          minus: false,
         };
       });
       const allAmountOfStaff = staff
@@ -101,11 +107,20 @@ export function createStore() {
           return pre + cur;
         });
 
-      const flattenStaff = {
-        name: '인건비',
-        amount: allAmountOfStaff ? allAmountOfStaff : 0,
-        detail: undefined,
-      };
+      const flattenStaff = [
+        {
+          name: '인건비',
+          amount: allAmountOfStaff ? allAmountOfStaff : 0,
+          detail: undefined,
+          minus: false,
+        },
+        {
+          name: '조회실패',
+          amount: 0,
+          detail: undefined,
+          minus: false,
+        },
+      ];
 
       return flattenAllAccounts?.concat(flattenStaff);
     },

@@ -14,6 +14,7 @@ import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import NonFetchedDataDisplay from '../non_fetched_data/non_fetched_data';
+import InLoading from '../in_loading/in_loading';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,12 +53,18 @@ function TabPanel(props: TabPanelProps) {
 
 const TapsDataNav = observer(() => {
   const [value, setValue] = React.useState(0);
-  const { focusedCorpList } = useStore();
+  const { focusedCorpList, fetchLoading } = useStore();
   const classes = useStyles();
   const { allAccounts, majorAccounts, staff } = focusedCorpList;
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
+
+  const AccountsOrNon = () =>
+    allAccounts ? <AllAccounts /> : <NonFetchedDataDisplay />;
+  const MajorAccountsOrNon = () =>
+    majorAccounts ? <AllMajorAccounts /> : <NonFetchedDataDisplay />;
+  const StaffOrNon = () => (staff ? <Staff /> : <NonFetchedDataDisplay />);
 
   return (
     <div>
@@ -84,7 +91,7 @@ const TapsDataNav = observer(() => {
             수 있습니다
           </p>
         </Box>
-        {allAccounts ? <AllAccounts /> : <NonFetchedDataDisplay />}
+        {fetchLoading ? <InLoading /> : <AccountsOrNon />}
       </TabPanel>
       <TabPanel value={value} index={1}>
         <h1 className={classes.title}>주요계정과목</h1>
@@ -92,7 +99,7 @@ const TapsDataNav = observer(() => {
           손익계산서와 대차대조표의 '핵심'
           <br />각 계정과목을 선택 해 보세요! 간단한 분석이 가능합니다.
         </p>
-        {majorAccounts ? <AllMajorAccounts /> : <NonFetchedDataDisplay />}
+        {fetchLoading ? <InLoading /> : <MajorAccountsOrNon />}
       </TabPanel>
       <TabPanel value={value} index={2}>
         <h1 className={classes.title}>직원 현황</h1>
@@ -100,7 +107,7 @@ const TapsDataNav = observer(() => {
           각 사업부분의 인원과 급여를 알 수 있습니다.
           <br />각 항목을 '클릭'하여 가시적으로 조회가 가능합니다.
         </p>
-        {staff ? <Staff /> : <NonFetchedDataDisplay />}
+        {fetchLoading ? <InLoading /> : <StaffOrNon />}
       </TabPanel>
     </div>
   );

@@ -1,7 +1,7 @@
 /** @format */
 
 import { makeStyles, Tab, Tabs } from '@material-ui/core';
-import { autorun } from 'mobx';
+import { autorun, reaction } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react';
 import React from 'react';
 import { useStore } from '../../stores/setUpContext';
@@ -23,10 +23,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Staff = observer(() => {
-  const { focusedCorpList } = useStore();
-  const { staff } = focusedCorpList;
   const classes = useStyles();
+  const rootStore = useStore();
   const state = useLocalObservable(staffState);
+  const { staff } = rootStore.focusedCorpList;
 
   const staffHeader = Array.from(
     new Set((staff as StaffType[]).map((li) => li.fo_bbm))
@@ -38,6 +38,18 @@ const Staff = observer(() => {
       state.setHeaderData(defaultData);
     }
   });
+  reaction(
+    () => rootStore.focusedCorpList,
+    (arg, pre) => {
+      if (arg !== pre) {
+        state.setDataForGraph({
+          subHeader: '',
+          manAmount: '10',
+          womanAmount: '20',
+        });
+      }
+    }
+  );
 
   return (
     <div className={classes.root}>

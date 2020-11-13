@@ -51,8 +51,6 @@ type FindCorpState = {
   reprt_code: AccountsType['reprt_code'];
   nameError: boolean;
   corp_code: string | null;
-  loading: boolean;
-  succese: boolean;
 };
 
 type FindCorpAction =

@@ -1,75 +1,111 @@
 /** @format */
 
 import {
-  Badge,
   Divider,
   Drawer,
+  IconButton,
   List,
   ListItem,
   ListItemText,
+  makeStyles,
+  Typography,
 } from '@material-ui/core';
 import React from 'react';
 import { useStore } from '../../../stores/setUpContext';
-import styles from './header_drawer.module.css';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import { observer } from 'mobx-react';
 
 interface HeaderDrawerProps {
   open: boolean;
   toggleOpen: () => void;
 }
 
-const HeaderDrawer: React.FC<HeaderDrawerProps> = ({ open, toggleOpen }) => {
-  const {
-    itemForCustom,
-    chosenCorpList,
-    removeChosenCorpList,
-    setFocusedCorpList,
-  } = useStore();
+const useStyles = makeStyles((theme) => ({
+  title: {
+    marginTop: '2rem',
+  },
+  list: {
+    width: '15rem',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  item: {
+    height: '6rem',
+    display: 'flex',
+  },
+}));
 
-  return (
-    <nav className={styles.nav} aria-label='mailbox folders'>
-      <Drawer
-        variant='temporary'
-        anchor='left'
-        open={open}
-        onClose={toggleOpen}
-        ModalProps={{
-          keepMounted: true, // Better open performance on mobile.
-        }}>
-        <List className={styles.list}>
-          <ListItem className={styles.item} button>
-            <Badge color='secondary' badgeContent={itemForCustom.length}>
-              <ListItemText primary='나만의 공식 제작소' />
-            </Badge>
-          </ListItem>
-          {chosenCorpList.map((item) => (
-            <ListItem
-              key={item.id}
-              className={styles.item}
-              onClick={() => {
-                toggleOpen();
-                setFocusedCorpList(
-                  chosenCorpList.find(
-                    (li) => li.id === item.id
-                  ) as ChosenCorpList
-                );
-              }}
-              button>
-              <ListItemText
-                primary={item.corp_name}
-                secondary={item.bsns_year}
-                primaryTypographyProps={{ className: styles.text }}
-              />
-              <button
-                onClick={() => {
-                  removeChosenCorpList(item.id);
-                }}></button>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-      </Drawer>
-    </nav>
-  );
-};
+const HeaderDrawer: React.FC<HeaderDrawerProps> = observer(
+  ({ open, toggleOpen }) => {
+    const {
+      chosenCorpList,
+      removeChosenCorpList,
+      setFocusedCorpList,
+    } = useStore();
+    const classes = useStyles();
+
+    return (
+      <nav aria-label='mailbox folders'>
+        <Drawer
+          variant='temporary'
+          anchor='left'
+          open={open}
+          onClose={toggleOpen}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}>
+          <Typography className={classes.title} variant='h4' align='center'>
+            회사목록
+          </Typography>
+          <List className={classes.list}>
+            {chosenCorpList.map((item) => (
+              <ListItem
+                key={item.id}
+                className={classes.item}
+                onClick={(event) => {
+                  if (event.target === event.currentTarget) {
+                    console.log('change');
+                    toggleOpen();
+                    setFocusedCorpList(item);
+                    console.log('change222222');
+                  }
+                }}
+                button>
+                <ListItemText
+                  primary={item.corp_name}
+                  secondary={`${item.bsns_year} - ${reprtCodeToString(
+                    item.reprt_code
+                  )}`}
+                />
+                <IconButton
+                  onClick={(event) => {
+                    removeChosenCorpList(item.id);
+                  }}>
+                  <DeleteOutlineIcon />
+                </IconButton>
+              </ListItem>
+            ))}
+          </List>
+          <Divider />
+        </Drawer>
+      </nav>
+    );
+  }
+);
 
 export default React.memo(HeaderDrawer);
+
+function reprtCodeToString(code: FindCorpState['reprt_code']) {
+  switch (code) {
+    case '11011':
+      return '사업보고서';
+    case '11012':
+      return '반기보고서';
+    case '11013':
+      return '1분기보고서';
+    case '11014':
+      return '3분기보고서';
+  }
+}

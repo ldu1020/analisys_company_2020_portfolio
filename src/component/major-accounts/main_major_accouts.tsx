@@ -1,6 +1,7 @@
 /** @format */
 
 import { Box, Card, makeStyles, Typography } from '@material-ui/core';
+import { reaction } from 'mobx';
 /** @format */
 
 import { observer, useLocalObservable } from 'mobx-react';
@@ -30,9 +31,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AllMajorAccounts = observer(() => {
-  const { fitteredMajorDataOfFocused } = useStore();
+  const rootStore = useStore();
   const classes = useStyles();
-  const { BSdata, ISdata } = fitteredMajorDataOfFocused;
+  const { BSdata, ISdata } = rootStore.fitteredMajorDataOfFocused;
   const state = useLocalObservable(() => ({
     account_nm: '',
     amount: '',
@@ -41,6 +42,15 @@ const AllMajorAccounts = observer(() => {
       this.amount = amount;
     },
   }));
+  reaction(
+    () => rootStore.fitteredMajorDataOfFocused,
+    (arg, pre) => {
+      console.log('inspect!2222');
+      if (arg !== pre) {
+        state.pickAccount('', '');
+      }
+    }
+  );
 
   return (
     <Box className={classes.root}>
