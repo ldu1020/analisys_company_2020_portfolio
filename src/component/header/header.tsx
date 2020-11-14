@@ -4,6 +4,7 @@ import {
   AppBar,
   Badge,
   Button,
+  Hidden,
   IconButton,
   makeStyles,
   Toolbar,
@@ -20,6 +21,8 @@ interface HeaderProps {
   onLogout?: () => void;
   userData?: UserData;
 }
+
+const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,11 +57,14 @@ const Header: React.FC<HeaderProps> = observer(({ onLogout, userData }) => {
   const [badgeInvisible, setBadgeInvisible] = useState(true);
   const classes = useStyles();
 
+  const toggleOpen = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
   reaction(
     () => chosenCorpList.length,
     (arg, prev) => {
       if (arg > prev) {
-        console.log(arg, prev);
         setBadgeInvisible(false);
       }
     }
@@ -66,51 +72,46 @@ const Header: React.FC<HeaderProps> = observer(({ onLogout, userData }) => {
 
   return (
     <AppBar position='static' className={classes.root}>
+      <HeaderDrawer
+        drawerWidth={drawerWidth}
+        open={drawerOpen}
+        toggleOpen={toggleOpen}
+      />
       <Toolbar>
+        <Hidden mdUp>
+          <IconButton
+            onClick={() => {
+              setDrawerOpen(!drawerOpen);
+              setBadgeInvisible(true);
+            }}
+            edge='start'
+            color='inherit'
+            aria-label='menu'>
+            <Badge color='secondary' variant='dot' invisible={badgeInvisible}>
+              <MenuIcon />
+            </Badge>
+          </IconButton>
+        </Hidden>
+
+        <Typography variant='h6'>돋보기</Typography>
+      </Toolbar>
+      <Hidden mdUp>
         <IconButton
           onClick={() => {
             setDrawerOpen(!drawerOpen);
             setBadgeInvisible(true);
           }}
-          edge='start'
-          color='inherit'
+          className={classes.subButton}
           aria-label='menu'>
-          <Badge color='secondary' variant='dot' invisible={badgeInvisible}>
+          <Badge
+            className={classes.badge}
+            color='secondary'
+            variant='dot'
+            invisible={badgeInvisible}>
             <MenuIcon />
           </Badge>
         </IconButton>
-        <Typography variant='h6'>돋보기</Typography>
-        {userData && (
-          <Button
-            className={classes.logoutBtn}
-            onClick={onLogout}
-            color='inherit'>
-            logout
-          </Button>
-        )}
-      </Toolbar>
-      <HeaderDrawer
-        open={drawerOpen}
-        toggleOpen={() => {
-          setDrawerOpen(!drawerOpen);
-        }}
-      />
-
-      <IconButton
-        onClick={() => {
-          setDrawerOpen(!drawerOpen);
-          setBadgeInvisible(true);
-        }}
-        className={classes.subButton}
-        aria-label='menu'>
-        <Badge
-          className={classes.badge}
-          color='secondary'
-          variant='dot'
-          invisible={badgeInvisible}>
-          <MenuIcon />
-        </Badge>
-      </IconButton>
+      </Hidden>
     </AppBar>
   );
 });
