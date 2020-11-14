@@ -54,7 +54,7 @@ const HeaderDrawer: React.FC<HeaderDrawerProps> = observer(
             <Typography className={classes.title} variant='h4' align='center'>
               회사목록
             </Typography>
-            <DrawerCorpList toggleOpen={toggleOpen} />
+            <DrawerCorpList />
           </Drawer>
         </Hidden>
       </nav>

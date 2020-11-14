@@ -106,7 +106,7 @@ interface Props {
 }
 
 const AnalisysOfAccounts: React.FC<Props> = observer(({ scrollToFind }) => {
-  const { flatDataOfFocused, focusedCorpList } = useStore();
+  const { flatDataOfFocused } = useStore();
   const classes = useStyles();
   const sectionRef = useRef<HTMLHeadingElement | null>(null);
   const [sectionY, setSectionY] = useState(false);
@@ -126,7 +126,6 @@ const AnalisysOfAccounts: React.FC<Props> = observer(({ scrollToFind }) => {
   return (
     <Container maxWidth='md'>
       <Box p={3}>
-        <h1>현재회사: {focusedCorpList.corp_name}</h1>
         <h1 className={classes.title} ref={sectionRef}>
           분석
         </h1>

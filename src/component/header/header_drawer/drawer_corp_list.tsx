@@ -6,6 +6,7 @@ import {
   ListItem,
   ListItemText,
   makeStyles,
+  useTheme,
 } from '@material-ui/core';
 import React from 'react';
 import { useStore } from '../../../stores/setUpContext';
@@ -30,16 +31,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface DrawerCorpListProps {
-  toggleOpen: () => void;
+  toggleOpen?: () => void;
 }
 
 const DrawerCorpList: React.FC<DrawerCorpListProps> = observer(
   ({ toggleOpen }) => {
     const {
+      focusedCorpList,
       chosenCorpList,
       removeChosenCorpList,
       setFocusedCorpList,
     } = useStore();
+    const theme = useTheme();
 
     const classes = useStyles();
 
@@ -55,7 +58,7 @@ const DrawerCorpList: React.FC<DrawerCorpListProps> = observer(
                   (li) => li === `${event.target.tagName}`
                 )
               ) {
-                toggleOpen();
+                toggleOpen && toggleOpen();
                 setFocusedCorpList(item);
               }
             }}
@@ -65,6 +68,14 @@ const DrawerCorpList: React.FC<DrawerCorpListProps> = observer(
               secondary={`${item.bsns_year} - ${reprtCodeToString(
                 item.reprt_code
               )}`}
+              primaryTypographyProps={{
+                style: {
+                  color:
+                    item.id === focusedCorpList.id
+                      ? theme.palette.secondary.main
+                      : undefined,
+                },
+              }}
             />
             <IconButton
               onClick={(event) => {
