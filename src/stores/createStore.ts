@@ -33,7 +33,7 @@ export function createStore() {
         let majorAccounts;
         let staff;
 
-        await Promise.all([
+        Promise.all([
           fetchAccountsOfFS(choiceList),
           fetchMajorAccountsOfFS(choiceList),
           fetchStaff(choiceList),
@@ -53,16 +53,15 @@ export function createStore() {
             majorAccounts = data[1];
             staff = data[2];
 
-            const fetchedData = {
-              ...choiceList,
-              allAccounts,
-              majorAccounts,
-              staff,
-            };
-            this.addChosenCorpList(fetchedData);
-            this.setFocusedCorpList(fetchedData);
+            return { ...choiceList, allAccounts, majorAccounts, staff };
+          })
+          .then((data) => {
+            this.addChosenCorpList(data);
+            this.setFocusedCorpList(data);
+          })
+          .then(() => {
+            this.fetchLoading = false;
           });
-        this.fetchLoading = false;
       } catch (err) {
         console.log(err);
         this.fetchLoading = false;

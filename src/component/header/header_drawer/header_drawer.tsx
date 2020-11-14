@@ -64,12 +64,14 @@ const HeaderDrawer: React.FC<HeaderDrawerProps> = observer(
               <ListItem
                 key={item.id}
                 className={classes.item}
-                onClick={(event) => {
-                  if (event.target === event.currentTarget) {
-                    console.log('change');
+                onClick={(event: any) => {
+                  if (
+                    !['path', 'svg', 'BUTTON'].find(
+                      (li) => li === `${event.target.tagName}`
+                    )
+                  ) {
                     toggleOpen();
                     setFocusedCorpList(item);
-                    console.log('change222222');
                   }
                 }}
                 button>
@@ -95,7 +97,7 @@ const HeaderDrawer: React.FC<HeaderDrawerProps> = observer(
   }
 );
 
-export default React.memo(HeaderDrawer);
+export default HeaderDrawer;
 
 function reprtCodeToString(code: FindCorpState['reprt_code']) {
   switch (code) {

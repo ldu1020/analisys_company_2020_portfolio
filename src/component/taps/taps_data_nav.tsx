@@ -53,7 +53,11 @@ function TabPanel(props: TabPanelProps) {
 
 const TapsDataNav = observer(() => {
   const [value, setValue] = React.useState(0);
-  const { focusedCorpList, fetchLoading } = useStore();
+  const {
+    focusedCorpList,
+    fetchLoading,
+    fitteredMajorDataOfFocused,
+  } = useStore();
   const classes = useStyles();
   const { allAccounts, majorAccounts, staff } = focusedCorpList;
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
@@ -61,9 +65,19 @@ const TapsDataNav = observer(() => {
   };
 
   const AccountsOrNon = () =>
-    allAccounts ? <AllAccounts /> : <NonFetchedDataDisplay />;
+    allAccounts ? (
+      <AllAccounts focusedCorpList={focusedCorpList} />
+    ) : (
+      <NonFetchedDataDisplay />
+    );
   const MajorAccountsOrNon = () =>
-    majorAccounts ? <AllMajorAccounts /> : <NonFetchedDataDisplay />;
+    majorAccounts ? (
+      <AllMajorAccounts
+        fitteredMajorDataOfFocused={fitteredMajorDataOfFocused}
+      />
+    ) : (
+      <NonFetchedDataDisplay />
+    );
   const StaffOrNon = () => (staff ? <Staff /> : <NonFetchedDataDisplay />);
 
   return (

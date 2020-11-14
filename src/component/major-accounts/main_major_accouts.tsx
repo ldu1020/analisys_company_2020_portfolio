@@ -6,7 +6,6 @@ import { reaction } from 'mobx';
 
 import { observer, useLocalObservable } from 'mobx-react';
 import React from 'react';
-import { useStore } from '../../stores/setUpContext';
 import AccountsList from './accounts_list';
 
 const useStyles = makeStyles((theme) => ({
@@ -30,58 +29,65 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AllMajorAccounts = observer(() => {
-  const rootStore = useStore();
-  const classes = useStyles();
-  const { BSdata, ISdata } = rootStore.fitteredMajorDataOfFocused;
-  const state = useLocalObservable(() => ({
-    account_nm: '',
-    amount: '',
-    pickAccount(account_nm: string, amount: string) {
-      this.account_nm = account_nm;
-      this.amount = amount;
-    },
-  }));
-  reaction(
-    () => rootStore.fitteredMajorDataOfFocused,
-    (arg, pre) => {
-      console.log('inspect!2222');
-      if (arg !== pre) {
-        state.pickAccount('', '');
-      }
-    }
-  );
+interface AllMajorAccountsProps {
+  fitteredMajorDataOfFocused: {
+    ISdata: MajorAccountsType[] | undefined;
+    BSdata: MajorAccountsType[] | undefined;
+  };
+}
 
-  return (
-    <Box className={classes.root}>
-      <Card className={classes.baseAccountCard}>
-        <Typography>
-          기준계정:{' '}
-          <span className={classes.baseAccount}>{state.account_nm} </span>{' '}
+const AllMajorAccounts: React.FC<AllMajorAccountsProps> = observer(
+  ({ fitteredMajorDataOfFocused }) => {
+    const classes = useStyles();
+    const { BSdata, ISdata } = fitteredMajorDataOfFocused;
+    const state = useLocalObservable(() => ({
+      account_nm: '',
+      amount: '',
+      pickAccount(account_nm: string, amount: string) {
+        this.account_nm = account_nm;
+        this.amount = amount;
+      },
+    }));
+    reaction(
+      () => fitteredMajorDataOfFocused,
+      (arg, pre) => {
+        if (arg !== pre) {
+          state.pickAccount('', '');
+        }
+      }
+    );
+
+    return (
+      <Box className={classes.root}>
+        <Card className={classes.baseAccountCard}>
+          <Typography>
+            기준계정:{' '}
+            <span className={classes.baseAccount}>{state.account_nm} </span>{' '}
+          </Typography>
+        </Card>
+        <Typography className={classes.listHeader} variant='h6'>
+          손익계산서
         </Typography>
-      </Card>
-      <Typography className={classes.listHeader} variant='h6'>
-        손익계산서
-      </Typography>
-      {BSdata && (
-        <AccountsList
-          majorAccount={BSdata}
-          baseAmount={state.amount}
-          pickAccount={state.pickAccount}
-        />
-      )}
-      <Typography className={classes.listHeader} variant='h6'>
-        대차대조표
-      </Typography>
-      {ISdata && (
-        <AccountsList
-          majorAccount={ISdata}
-          baseAmount={state.amount}
-          pickAccount={state.pickAccount}
-        />
-      )}
-    </Box>
-  );
-});
+        {BSdata && (
+          <AccountsList
+            majorAccount={BSdata}
+            baseAmount={state.amount}
+            pickAccount={state.pickAccount}
+          />
+        )}
+        <Typography className={classes.listHeader} variant='h6'>
+          대차대조표
+        </Typography>
+        {ISdata && (
+          <AccountsList
+            majorAccount={ISdata}
+            baseAmount={state.amount}
+            pickAccount={state.pickAccount}
+          />
+        )}
+      </Box>
+    );
+  }
+);
 
 export default AllMajorAccounts;

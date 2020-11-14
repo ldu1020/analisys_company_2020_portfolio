@@ -14,6 +14,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import HeaderDrawer from './header_drawer/header_drawer';
 import { useStore } from '../../stores/setUpContext';
 import { reaction } from 'mobx';
+import { observer } from 'mobx-react';
 
 interface HeaderProps {
   onLogout?: () => void;
@@ -47,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Header: React.FC<HeaderProps> = ({ onLogout, userData }) => {
+const Header: React.FC<HeaderProps> = observer(({ onLogout, userData }) => {
   const { chosenCorpList } = useStore();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [badgeInvisible, setBadgeInvisible] = useState(true);
@@ -112,6 +113,6 @@ const Header: React.FC<HeaderProps> = ({ onLogout, userData }) => {
       </IconButton>
     </AppBar>
   );
-};
+});
 
 export default Header;

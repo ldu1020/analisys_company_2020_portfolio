@@ -30,62 +30,68 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AllAccounts = observer(() => {
-  const rootStore = useStore();
-  const { allAccounts } = rootStore.focusedCorpList as ChosenCorpList;
-  const classes = useStyles();
+interface AllAccountsProps {
+  focusedCorpList: ChosenCorpList;
+}
 
-  const AccountsStore = useLocalObservable(() => ({
-    chosenAccounts: [] as AccountsType[],
-    onReset() {
-      this.chosenAccounts = [];
-    },
-    onChoiceList(item: AccountsType): void {
-      const index = this.chosenAccounts.indexOf(item);
-      index === -1 && this.chosenAccounts.push(item);
-    },
-    onReomveList(item: AccountsType): void {
-      const index = this.chosenAccounts.indexOf(item);
-      this.chosenAccounts.splice(index, 1);
-    },
-  }));
+const AllAccounts: React.FC<AllAccountsProps> = observer(
+  ({ focusedCorpList }) => {
+    const { allAccounts } = focusedCorpList as ChosenCorpList;
+    const classes = useStyles();
 
-  reaction(
-    () => rootStore.focusedCorpList,
-    (arg, pre) => {
-      if (arg !== pre) {
-        AccountsStore.onReset();
+    const AccountsStore = useLocalObservable(() => ({
+      chosenAccounts: [] as AccountsType[],
+      onReset() {
+        this.chosenAccounts = [];
+      },
+      onChoiceList(item: AccountsType): void {
+        const index = this.chosenAccounts.indexOf(item);
+        index === -1 && this.chosenAccounts.push(item);
+      },
+      onReomveList(item: AccountsType): void {
+        const index = this.chosenAccounts.indexOf(item);
+        this.chosenAccounts.splice(index, 1);
+      },
+    }));
+
+    reaction(
+      () => focusedCorpList,
+      (arg, pre) => {
+        if (arg !== pre) {
+          AccountsStore.onReset();
+        }
       }
-    }
-  );
-  return (
-    <Box className={classes.root}>
-      <p>ALL</p>
-      <Card className={classes.accountCard}>
-        <Account
-          fsList={allAccounts as AccountsType[]}
-          clickCallBack={AccountsStore.onChoiceList}
-        />
-      </Card>
-      <ExpandMoreIcon className={classes.downIcon} />
-      <p>SELECTED</p>
-      <Card className={classes.accountCard}>
-        <Account
-          fsList={AccountsStore.chosenAccounts}
-          clickCallBack={[
-            { role: '제거하기', function: AccountsStore.onReomveList },
-            {
-              role: '커스텀등록',
-              function: () => {
-                alert('준비 중입니다.');
+    );
+
+    return (
+      <Box className={classes.root}>
+        <p>ALL</p>
+        <Card className={classes.accountCard}>
+          <Account
+            fsList={allAccounts as AccountsType[]}
+            clickCallBack={AccountsStore.onChoiceList}
+          />
+        </Card>
+        <ExpandMoreIcon className={classes.downIcon} />
+        <p>SELECTED</p>
+        <Card className={classes.accountCard}>
+          <Account
+            fsList={AccountsStore.chosenAccounts}
+            clickCallBack={[
+              { role: '제거하기', function: AccountsStore.onReomveList },
+              {
+                role: '커스텀등록',
+                function: () => {
+                  alert('준비 중입니다.');
+                },
               },
-            },
-          ]}
-        />
-      </Card>
-      <AccountsPicker chosenFsList={AccountsStore.chosenAccounts} />
-    </Box>
-  );
-});
+            ]}
+          />
+        </Card>
+        <AccountsPicker chosenFsList={AccountsStore.chosenAccounts} />
+      </Box>
+    );
+  }
+);
 
 export default AllAccounts;

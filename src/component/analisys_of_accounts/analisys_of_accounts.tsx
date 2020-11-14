@@ -5,14 +5,17 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
+  Grow,
+  IconButton,
   makeStyles,
 } from '@material-ui/core';
 import { observer } from 'mobx-react';
-import React from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { useStore } from '../../stores/setUpContext';
 import NonFetchedDataDisplay from '../non_fetched_data/non_fetched_data';
 import CalculatorComponent from './calculator_component';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles((theme) => ({
   analisysSet: {
@@ -34,6 +37,21 @@ const useStyles = makeStyles((theme) => ({
   details: {
     display: 'flex',
     flexDirection: 'column',
+  },
+  searchNavBtn: {
+    color: '#fff',
+    position: 'fixed',
+    bottom: '7rem',
+    right: '1rem',
+    backgroundColor: theme.palette.secondary.light,
+    boxShadow: theme.shadows['2'],
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.dark,
+      boxShadow: 'none',
+    },
+    '&:active': {
+      boxShadow: 'none',
+    },
   },
 }));
 
@@ -79,13 +97,35 @@ const dataSet = [
     division: ['인건비', '영업이익'],
   },
 ];
-const AnalisysOfAccounts = observer(() => {
+
+interface Props {
+  scrollToFind: () => void;
+}
+
+const AnalisysOfAccounts: React.FC<Props> = observer(({ scrollToFind }) => {
   const { flatDataOfFocused, focusedCorpList } = useStore();
   const classes = useStyles();
+  const sectionRef = useRef<HTMLHeadingElement | null>(null);
+  const [sectionY, setSectionY] = useState(false);
+
+  useLayoutEffect(() => {
+    if (sectionRef.current) {
+      window.addEventListener('scroll', () => {
+        sectionRef.current && sectionRef.current.getBoundingClientRect().y < 0
+          ? setSectionY(true)
+          : setSectionY(false);
+      });
+    } else {
+      setSectionY(false);
+    }
+  }, []);
+
   return (
     <Box p={3}>
       <h1>현재회사: {focusedCorpList.corp_name}</h1>
-      <h1 className={classes.title}>분석</h1>
+      <h1 className={classes.title} ref={sectionRef}>
+        분석
+      </h1>
       <p className={classes.description}>
         각 항목은 주요한 분석지표입니다
         <br /> 데이터가 기업마다 상이할 수 있어, <br />
@@ -120,6 +160,11 @@ const AnalisysOfAccounts = observer(() => {
           )}
         </div>
       ))}
+      <Grow in={sectionY}>
+        <IconButton className={classes.searchNavBtn} onClick={scrollToFind}>
+          <SearchIcon />
+        </IconButton>
+      </Grow>
     </Box>
   );
 });
