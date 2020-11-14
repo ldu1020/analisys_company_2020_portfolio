@@ -3,6 +3,7 @@
 import {
   Box,
   Button,
+  Container,
   FormControl,
   InputLabel,
   makeStyles,
@@ -75,7 +76,7 @@ const FindCorpCode = observer(() => {
   };
 
   return (
-    <div className={classes.root}>
+    <Container className={classes.root} maxWidth='sm'>
       <Typography variant='h5'>SEARCH</Typography>
       <Box component='div' display='flex' width='100%'>
         <TextField
@@ -148,7 +149,7 @@ const FindCorpCode = observer(() => {
           </Zoom>
         </Box>
       </Box>
-    </div>
+    </Container>
   );
 });
 

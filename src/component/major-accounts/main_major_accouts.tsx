@@ -29,14 +29,14 @@ const useStyles = makeStyles((theme) => ({
   },
 
   AccountZone: {
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up('sm')]: {
       width: '100%',
       display: 'flex',
       justifyContent: 'space-between',
     },
   },
   accountWrapper: {
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up('sm')]: {
       width: '47%',
     },
   },
@@ -81,7 +81,7 @@ const AllMajorAccounts: React.FC<AllMajorAccountsProps> = observer(
         <div className={classes.AccountZone}>
           <div className={classes.accountWrapper}>
             <Typography className={classes.listHeader} variant='h6'>
-              손익계산서
+              대차대조표
             </Typography>
             {BSdata && (
               <AccountsList
@@ -93,7 +93,7 @@ const AllMajorAccounts: React.FC<AllMajorAccountsProps> = observer(
           </div>
           <div className={classes.accountWrapper}>
             <Typography className={classes.listHeader} variant='h6'>
-              대차대조표
+              손익계산서
             </Typography>
             {ISdata && (
               <AccountsList

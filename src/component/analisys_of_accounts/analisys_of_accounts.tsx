@@ -5,6 +5,8 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
+  Container,
+  Grid,
   Grow,
   IconButton,
   makeStyles,
@@ -19,6 +21,7 @@ import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles((theme) => ({
   analisysSet: {
+    width: '100%',
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
@@ -121,51 +124,57 @@ const AnalisysOfAccounts: React.FC<Props> = observer(({ scrollToFind }) => {
   }, []);
 
   return (
-    <Box p={3}>
-      <h1>현재회사: {focusedCorpList.corp_name}</h1>
-      <h1 className={classes.title} ref={sectionRef}>
-        분석
-      </h1>
-      <p className={classes.description}>
-        각 항목은 주요한 분석지표입니다
-        <br /> 데이터가 기업마다 상이할 수 있어, <br />
-        기본적으로 제공하는 데이터가 '조회 불가' 일 경우에
-        <br />
-        직접 계정과목을 선택해서 원하는 정보를 알아내세요! <br />
-        간단한 검색도 가능합니다.
-      </p>
-      {dataSet.map((data) => (
-        <div key={data.title} className={classes.analisysSet}>
-          <p className={classes.nameOfAnalisys}>{data.title}</p>
-          <p>{data.basis}</p>
+    <Container maxWidth='md'>
+      <Box p={3}>
+        <h1>현재회사: {focusedCorpList.corp_name}</h1>
+        <h1 className={classes.title} ref={sectionRef}>
+          분석
+        </h1>
+        <p className={classes.description}>
+          각 항목은 주요한 분석지표입니다
+          <br /> 데이터가 기업마다 상이할 수 있어, <br />
+          기본적으로 제공하는 데이터가 '조회 불가' 일 경우에
+          <br />
+          직접 계정과목을 선택해서 원하는 정보를 알아내세요! <br />
+          간단한 검색도 가능합니다.
+        </p>
 
-          {flatDataOfFocused ? (
-            <CalculatorComponent
-              description={data.description}
-              plus={data.plus}
-              division={data.division}
-            />
-          ) : (
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls='panel1a-content'
-                id='panel1a-header'>
-                데이터를 검색해 주세요
-              </AccordionSummary>
-              <AccordionDetails className={classes.details}>
-                <NonFetchedDataDisplay />
-              </AccordionDetails>
-            </Accordion>
-          )}
-        </div>
-      ))}
-      <Grow in={sectionY}>
-        <IconButton className={classes.searchNavBtn} onClick={scrollToFind}>
-          <SearchIcon />
-        </IconButton>
-      </Grow>
-    </Box>
+        <Grid container spacing={3}>
+          {dataSet.map((data) => (
+            <Grid item md={6} key={data.title} className={classes.analisysSet}>
+              <p className={classes.nameOfAnalisys}>{data.title}</p>
+              <p>{data.basis}</p>
+
+              {flatDataOfFocused ? (
+                <CalculatorComponent
+                  description={data.description}
+                  plus={data.plus}
+                  division={data.division}
+                />
+              ) : (
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls='panel1a-content'
+                    id='panel1a-header'>
+                    데이터를 검색해 주세요
+                  </AccordionSummary>
+                  <AccordionDetails className={classes.details}>
+                    <NonFetchedDataDisplay />
+                  </AccordionDetails>
+                </Accordion>
+              )}
+            </Grid>
+          ))}
+        </Grid>
+
+        <Grow in={sectionY}>
+          <IconButton className={classes.searchNavBtn} onClick={scrollToFind}>
+            <SearchIcon />
+          </IconButton>
+        </Grow>
+      </Box>
+    </Container>
   );
 });
 

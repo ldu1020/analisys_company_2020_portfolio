@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up('sm')]: {
       flexDirection: 'row',
       alignItems: 'normal',
     },

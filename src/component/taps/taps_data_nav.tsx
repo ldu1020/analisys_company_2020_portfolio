@@ -9,7 +9,7 @@ import AllAccounts from '../all_accounts/main_all_accounts';
 import { useStore } from '../../stores/setUpContext';
 import { observer } from 'mobx-react';
 import AllMajorAccounts from '../major-accounts/main_major_accouts';
-import { makeStyles, Paper } from '@material-ui/core';
+import { Container, makeStyles, Paper } from '@material-ui/core';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
@@ -46,7 +46,11 @@ function TabPanel(props: TabPanelProps) {
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
       {...other}>
-      {value === index && <Box p={3}>{children}</Box>}
+      {value === index && (
+        <Container maxWidth='md'>
+          <Box p={3}>{children}</Box>
+        </Container>
+      )}
     </div>
   );
 }
