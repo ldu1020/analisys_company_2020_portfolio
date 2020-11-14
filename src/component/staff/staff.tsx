@@ -10,16 +10,46 @@ import StaffGraph from './staff_graph';
 import { staffState } from './staff_state';
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    [theme.breakpoints.up('md')]: {
+      flexDirection: 'row-reverse',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+  },
   eachCard: {
     display: 'flex',
   },
   subHeader: {
+    width: '100%',
     marginBottom: '0.5rem',
     textAlign: 'center',
     fontSize: '1rem',
   },
+  tabs: {
+    width: '100%',
+  },
   cardHeader: {},
+  graphWrapper: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    [theme.breakpoints.up('md')]: {
+      width: '47%',
+    },
+  },
+  cardWrapper: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    [theme.breakpoints.up('md')]: {
+      width: '47%',
+    },
+  },
 }));
 
 const Staff = observer(() => {
@@ -53,27 +83,37 @@ const Staff = observer(() => {
 
   return (
     <div className={classes.root}>
-      <StaffGraph dataForGraph={state.dataForGraph} eachRate={state.eachRate} />
-      <p className={classes.subHeader}>사업부문</p>
-      <Tabs
-        value={state.navValue}
-        onChange={(e, value) => {
-          state.setNavValue(value);
-          const data = staff?.filter((li) => li.fo_bbm === staffHeader[value]);
-          data && state.setHeaderData(data);
-        }}
-        variant='scrollable'
-        scrollButtons='on'>
-        {staffHeader.map((header, index) => (
-          <Tab key={header} label={header} value={index} />
-        ))}
-      </Tabs>
-      {
-        <StaffCard
-          genderData={state.genderData}
-          setData={state.setDataForGraph}
+      <div className={classes.graphWrapper}>
+        <StaffGraph
+          dataForGraph={state.dataForGraph}
+          eachRate={state.eachRate}
         />
-      }
+      </div>
+      <div className={classes.cardWrapper}>
+        <p className={classes.subHeader}>사업부문</p>
+        <Tabs
+          className={classes.tabs}
+          value={state.navValue}
+          onChange={(e, value) => {
+            state.setNavValue(value);
+            const data = staff?.filter(
+              (li) => li.fo_bbm === staffHeader[value]
+            );
+            data && state.setHeaderData(data);
+          }}
+          variant='scrollable'
+          scrollButtons='on'>
+          {staffHeader.map((header, index) => (
+            <Tab key={header} label={header} value={index} />
+          ))}
+        </Tabs>
+        {
+          <StaffCard
+            genderData={state.genderData}
+            setData={state.setDataForGraph}
+          />
+        }
+      </div>
     </div>
   );
 });

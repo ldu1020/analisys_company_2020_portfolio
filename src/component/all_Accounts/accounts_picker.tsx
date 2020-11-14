@@ -7,6 +7,7 @@ import {
   ListItemText,
   MenuItem,
   Select,
+  useTheme,
 } from '@material-ui/core';
 import { observer } from 'mobx-react';
 import React, { useState } from 'react';
@@ -26,6 +27,7 @@ const AccountsPicker: React.FC<AccountsPickerProps> = observer(
       );
       chosenItem ? setPickedItem(chosenItem) : console.log('픽아이탐 x ');
     };
+    const theme = useTheme();
 
     return (
       <Box
@@ -56,7 +58,9 @@ const AccountsPicker: React.FC<AccountsPickerProps> = observer(
           </Select>
         </FormControl>
         {pickedItem ? (
-          <ChartOfAccounts pickedItem={pickedItem} />
+          <Box width='100%' maxWidth={theme.breakpoints.values.sm}>
+            <ChartOfAccounts pickedItem={pickedItem} />
+          </Box>
         ) : (
           <Box width='100%'>
             <NonFetchedDataDisplay />

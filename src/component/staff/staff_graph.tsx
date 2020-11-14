@@ -6,6 +6,8 @@ import CountUp from 'react-countup';
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    width: '100%',
+    maxWidth: theme.breakpoints.values.sm,
     backgroundColor: '#fff',
     display: 'flex',
     flexDirection: 'column',

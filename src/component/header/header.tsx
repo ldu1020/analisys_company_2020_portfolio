@@ -3,7 +3,6 @@
 import {
   AppBar,
   Badge,
-  Button,
   Hidden,
   IconButton,
   makeStyles,

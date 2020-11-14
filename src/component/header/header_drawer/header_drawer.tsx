@@ -8,7 +8,6 @@ import {
   Typography,
 } from '@material-ui/core';
 import React from 'react';
-import { useStore } from '../../../stores/setUpContext';
 import { observer } from 'mobx-react';
 import DrawerCorpList from './drawer_corp_list';
 

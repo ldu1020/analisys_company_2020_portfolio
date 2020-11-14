@@ -27,6 +27,19 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     margin: '1rem',
   },
+
+  AccountZone: {
+    [theme.breakpoints.up('md')]: {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'space-between',
+    },
+  },
+  accountWrapper: {
+    [theme.breakpoints.up('md')]: {
+      width: '47%',
+    },
+  },
 }));
 
 interface AllMajorAccountsProps {
@@ -65,26 +78,32 @@ const AllMajorAccounts: React.FC<AllMajorAccountsProps> = observer(
             <span className={classes.baseAccount}>{state.account_nm} </span>{' '}
           </Typography>
         </Card>
-        <Typography className={classes.listHeader} variant='h6'>
-          손익계산서
-        </Typography>
-        {BSdata && (
-          <AccountsList
-            majorAccount={BSdata}
-            baseAmount={state.amount}
-            pickAccount={state.pickAccount}
-          />
-        )}
-        <Typography className={classes.listHeader} variant='h6'>
-          대차대조표
-        </Typography>
-        {ISdata && (
-          <AccountsList
-            majorAccount={ISdata}
-            baseAmount={state.amount}
-            pickAccount={state.pickAccount}
-          />
-        )}
+        <div className={classes.AccountZone}>
+          <div className={classes.accountWrapper}>
+            <Typography className={classes.listHeader} variant='h6'>
+              손익계산서
+            </Typography>
+            {BSdata && (
+              <AccountsList
+                majorAccount={BSdata}
+                baseAmount={state.amount}
+                pickAccount={state.pickAccount}
+              />
+            )}
+          </div>
+          <div className={classes.accountWrapper}>
+            <Typography className={classes.listHeader} variant='h6'>
+              대차대조표
+            </Typography>
+            {ISdata && (
+              <AccountsList
+                majorAccount={ISdata}
+                baseAmount={state.amount}
+                pickAccount={state.pickAccount}
+              />
+            )}
+          </div>
+        </div>
       </Box>
     );
   }

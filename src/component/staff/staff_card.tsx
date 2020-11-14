@@ -4,7 +4,9 @@ import { Divider, List, ListItem, makeStyles } from '@material-ui/core';
 import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
+  root: {
+    width: '100%',
+  },
   cardHeader: {
     display: 'flex',
     height: '3rem',

@@ -1,6 +1,6 @@
 /** @format */
 
-import { Box, Card, makeStyles } from '@material-ui/core';
+import { Box, Card, makeStyles, Typography } from '@material-ui/core';
 import { observer, useLocalObservable } from 'mobx-react';
 import React from 'react';
 import { useStore } from '../../stores/setUpContext';
@@ -11,22 +11,31 @@ import { reaction } from 'mobx';
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    width: '100%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
   },
-
+  selectZone: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    [theme.breakpoints.up('md')]: {
+      flexDirection: 'row',
+      alignItems: 'normal',
+    },
+  },
+  accountWrapper: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    margin: '1rem',
+  },
   accountCard: {
     width: '100%',
-    marginBottom: '1rem',
-  },
-  downIcon: {
-    boxShadow: theme.shadows['1'],
-    borderRadius: '50%',
-    margin: '2rem',
-    width: '2rem',
-    height: '2rem',
-    transition: 'all 0.4s',
+    margin: '1rem',
   },
 }));
 
@@ -65,29 +74,34 @@ const AllAccounts: React.FC<AllAccountsProps> = observer(
 
     return (
       <Box className={classes.root}>
-        <p>ALL</p>
-        <Card className={classes.accountCard}>
-          <Account
-            fsList={allAccounts as AccountsType[]}
-            clickCallBack={AccountsStore.onChoiceList}
-          />
-        </Card>
-        <ExpandMoreIcon className={classes.downIcon} />
-        <p>SELECTED</p>
-        <Card className={classes.accountCard}>
-          <Account
-            fsList={AccountsStore.chosenAccounts}
-            clickCallBack={[
-              { role: '제거하기', function: AccountsStore.onReomveList },
-              {
-                role: '커스텀등록',
-                function: () => {
-                  alert('준비 중입니다.');
-                },
-              },
-            ]}
-          />
-        </Card>
+        <div className={classes.selectZone}>
+          <div className={classes.accountWrapper}>
+            <Typography align='center'>ALL</Typography>
+            <Card className={classes.accountCard}>
+              <Account
+                fsList={allAccounts as AccountsType[]}
+                clickCallBack={AccountsStore.onChoiceList}
+              />
+            </Card>
+          </div>
+          <div className={classes.accountWrapper}>
+            <Typography align='center'>SELECTED</Typography>
+            <Card className={classes.accountCard}>
+              <Account
+                fsList={AccountsStore.chosenAccounts}
+                clickCallBack={[
+                  { role: '제거하기', function: AccountsStore.onReomveList },
+                  {
+                    role: '커스텀등록',
+                    function: () => {
+                      alert('준비 중입니다.');
+                    },
+                  },
+                ]}
+              />
+            </Card>
+          </div>
+        </div>
         <AccountsPicker chosenFsList={AccountsStore.chosenAccounts} />
       </Box>
     );
