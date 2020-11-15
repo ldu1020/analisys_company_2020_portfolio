@@ -11,14 +11,7 @@ const firebaseConfig = {
   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
 };
 
-const testA = {
-  apiKey: 'AIzaSyA0gWzEmvBZ6_KYX9qJ_U5J8O5lfGi7IRQ',
-  authDomain: 'company-analysis-8ea03.firebaseapp.com',
-  databaseURL: 'https://company-analysis-8ea03.firebaseio.com',
-  projectId: 'company-analysis-8ea03',
-};
-
-const firebaseApp = firebase.initializeApp(testA);
+const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 export const firebaseAuth = firebaseApp.auth();
 export const firebaseDatabase = firebaseApp.database();
