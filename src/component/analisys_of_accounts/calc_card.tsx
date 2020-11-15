@@ -8,6 +8,7 @@ import {
   TextField,
 } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
+import { observer } from 'mobx-react';
 import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
@@ -35,56 +36,54 @@ interface CalcCardProps {
   updateState: any;
 }
 
-const CalcCard: React.FC<CalcCardProps> = ({
-  state,
-  flatDataOfFocused,
-  updateState,
-}) => {
-  const classes = useStyles();
+const CalcCard: React.FC<CalcCardProps> = observer(
+  ({ state, flatDataOfFocused, updateState }) => {
+    const classes = useStyles();
 
-  return (
-    <Card className={classes.card} variant='outlined'>
-      {state.map((li, index) => (
-        <div key={li.name + li.detail}>
-          <Autocomplete
-            options={flatDataOfFocused}
-            getOptionLabel={(option) =>
-              `${option.name}${option.detail ? '-' + option.detail : ''}`
-            }
-            onChange={(event, value) => {
-              if (value && value.amount) {
-                const update = [...state];
-                update[index] = value as FlatData;
-                updateState(update);
+    return (
+      <Card className={classes.card} variant='outlined'>
+        {state.map((li, index) => (
+          <div key={li.name + li.detail}>
+            <Autocomplete
+              options={flatDataOfFocused}
+              getOptionLabel={(option) =>
+                `${option.name}${option.detail ? '-' + option.detail : ''}`
               }
-            }}
-            value={li}
-            renderInput={(params) => (
-              <TextField {...params} variant='standard' />
-            )}
-          />
-          <div className={classes.listBelow}>
-            <p className={classes.eachAmount}>{li.amount}</p>
-            <FormControlLabel
-              classes={{ label: classes.checkboxLabel }}
-              control={
-                <Checkbox
-                  checked={Boolean(li.minus)}
-                  onChange={() => {
-                    const update = [...state];
-                    update[index].minus = !update[index].minus;
-                    updateState(update);
-                  }}
-                />
-              }
-              label='minus?'
-              labelPlacement='start'
+              onChange={(event, value) => {
+                if (value && value.amount) {
+                  const update = [...state];
+                  update[index] = value as FlatData;
+                  updateState(update);
+                }
+              }}
+              value={li}
+              renderInput={(params) => (
+                <TextField {...params} variant='standard' />
+              )}
             />
+            <div className={classes.listBelow}>
+              <p className={classes.eachAmount}>{li.amount}</p>
+              <FormControlLabel
+                classes={{ label: classes.checkboxLabel }}
+                control={
+                  <Checkbox
+                    checked={Boolean(li.minus)}
+                    onChange={() => {
+                      const update = [...state];
+                      update[index].minus = !update[index].minus;
+                      updateState(update);
+                    }}
+                  />
+                }
+                label='minus?'
+                labelPlacement='start'
+              />
+            </div>
           </div>
-        </div>
-      ))}
-    </Card>
-  );
-};
+        ))}
+      </Card>
+    );
+  }
+);
 
 export default CalcCard;

@@ -47,7 +47,6 @@ const FindCorpCode = observer(() => {
   const classes = useStyles();
 
   const onChange = (e: any) => {
-    console.log(e.target.value);
     dispatch({
       type: 'ON_CHANGE',
       target: e.target,
@@ -74,6 +73,44 @@ const FindCorpCode = observer(() => {
         corp_code,
       });
   };
+
+  const SelectYear = React.memo(() => (
+    <FormControl
+      disabled={!state.corp_code}
+      variant={!state.corp_code ? 'filled' : 'outlined'}>
+      <InputLabel id='demo-simple-select-label'>조회년도</InputLabel>
+      <Select
+        label='조회년도'
+        name='bsns_year'
+        onChange={onChange}
+        value={state.bsns_year}
+        style={{ marginBottom: '1rem' }}>
+        <MenuItem value='2015'>2015</MenuItem>
+        <MenuItem value='2016'>2016</MenuItem>
+        <MenuItem value='2017'>2017</MenuItem>
+        <MenuItem value='2018'>2018</MenuItem>
+        <MenuItem value='2019'>2019</MenuItem>
+      </Select>
+    </FormControl>
+  ));
+
+  const SelectReport = React.memo(() => (
+    <FormControl
+      disabled={!state.corp_code}
+      variant={!state.corp_code ? 'filled' : 'outlined'}>
+      <InputLabel id='demo-simple-select-label'>분기</InputLabel>
+      <Select
+        label='분기'
+        name='reprt_code'
+        onChange={onChange}
+        value={state.reprt_code}>
+        <MenuItem value={'11011'}>사업보고서</MenuItem>
+        <MenuItem value={'11012'}>반기보고서</MenuItem>
+        <MenuItem value={'11013'}>1분기보고서</MenuItem>
+        <MenuItem value={'11014'}>3분기보고서</MenuItem>
+      </Select>
+    </FormControl>
+  ));
 
   return (
     <Container className={classes.root} maxWidth='sm'>
@@ -104,38 +141,8 @@ const FindCorpCode = observer(() => {
       </Box>
       <Box display='flex'>
         <Box display='flex' flexDirection='column' width='50%'>
-          <FormControl
-            disabled={!state.corp_code}
-            variant={!state.corp_code ? 'filled' : 'outlined'}>
-            <InputLabel id='demo-simple-select-label'>조회년도</InputLabel>
-            <Select
-              label='조회년도'
-              name='bsns_year'
-              onChange={onChange}
-              value={state.bsns_year}
-              style={{ marginBottom: '1rem' }}>
-              <MenuItem value='2015'>2015</MenuItem>
-              <MenuItem value='2016'>2016</MenuItem>
-              <MenuItem value='2017'>2017</MenuItem>
-              <MenuItem value='2018'>2018</MenuItem>
-              <MenuItem value='2019'>2019</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl
-            disabled={!state.corp_code}
-            variant={!state.corp_code ? 'filled' : 'outlined'}>
-            <InputLabel id='demo-simple-select-label'>분기</InputLabel>
-            <Select
-              label='분기'
-              name='reprt_code'
-              onChange={onChange}
-              value={state.reprt_code}>
-              <MenuItem value={'11011'}>사업보고서</MenuItem>
-              <MenuItem value={'11012'}>반기보고서</MenuItem>
-              <MenuItem value={'11013'}>1분기보고서</MenuItem>
-              <MenuItem value={'11014'}>3분기보고서</MenuItem>
-            </Select>
-          </FormControl>
+          <SelectYear />
+          <SelectReport />
         </Box>
         <Box p='1rem' width='50%'>
           <Zoom in={state.corp_code ? true : false}>

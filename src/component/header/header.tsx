@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
   badge: {},
   subButton: {
+    zIndex: theme.zIndex.snackbar,
     color: '#fff',
     position: 'fixed',
     bottom: '3rem',

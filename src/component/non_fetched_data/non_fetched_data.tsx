@@ -12,7 +12,7 @@ const NonFetchedDataDisplay = () => {
         flexDirection='column'
         alignItems='center'
         justifyContent='center'>
-        <ErrorOutlineIcon />
+        <ErrorOutlineIcon style={{ marginBottom: '1rem' }} />
         <Typography>조회된 데이터가 없습니다.</Typography>
       </Box>
     </Card>

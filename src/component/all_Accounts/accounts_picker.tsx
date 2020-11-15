@@ -25,7 +25,7 @@ const AccountsPicker: React.FC<AccountsPickerProps> = observer(
       const chosenItem = chosenFsList.find(
         (li) => li.id === event.target.value
       );
-      chosenItem ? setPickedItem(chosenItem) : console.log('픽아이탐 x ');
+      chosenItem && setPickedItem(chosenItem);
     };
     const theme = useTheme();
 

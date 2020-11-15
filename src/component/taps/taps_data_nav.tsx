@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     position: 'sticky',
     top: '0',
-    zIndex: theme.zIndex.appBar,
+    zIndex: theme.zIndex.mobileStepper,
   },
   title: {
     fontWeight: theme.typography.fontWeightMedium,
