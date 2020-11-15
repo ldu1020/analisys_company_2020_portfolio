@@ -3,11 +3,15 @@
 import { Box, CircularProgress } from '@material-ui/core';
 import React from 'react';
 
-const InLoading = () => {
+interface Props {
+  fullSize?: boolean;
+}
+
+const InLoading: React.FC<Props> = ({ fullSize }) => {
   return (
     <Box
       width='100%'
-      height='100%'
+      height={fullSize ? '100vh' : '100%'}
       display='flex'
       alignItems='center'
       justifyContent='center'>

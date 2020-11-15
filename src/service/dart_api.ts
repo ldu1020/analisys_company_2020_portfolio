@@ -3,7 +3,7 @@ import axios from 'axios';
 import JSZip from 'jszip';
 import convert from 'xml-js';
 
-const key = process.env.DART_API_KEY;
+const key = process.env.REACT_APP_DART_API_KEY;
 
 export const fetchCORPCODE = async () => {
   const uniqueIdAPI = `api/corpCode.xml?crtfc_key=${key}`;
