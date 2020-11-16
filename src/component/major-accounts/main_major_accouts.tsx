@@ -1,11 +1,10 @@
 /** @format */
 
-import { Box, Card, makeStyles, Typography } from '@material-ui/core';
-import { reaction } from 'mobx';
-/** @format */
-
-import { observer, useLocalObservable } from 'mobx-react';
 import React from 'react';
+import { reaction } from 'mobx';
+import { observer, useLocalObservable } from 'mobx-react';
+import { Box, Card, makeStyles, Typography } from '@material-ui/core';
+
 import AccountsList from './accounts_list';
 
 const useStyles = makeStyles((theme) => ({

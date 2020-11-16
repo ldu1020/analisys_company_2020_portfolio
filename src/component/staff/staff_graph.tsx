@@ -1,8 +1,8 @@
 /** @format */
 
 import React from 'react';
-import { makeStyles, Paper } from '@material-ui/core';
 import CountUp from 'react-countup';
+import { makeStyles, Paper } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {

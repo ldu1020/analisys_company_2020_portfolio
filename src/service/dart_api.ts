@@ -3,10 +3,12 @@ import axios from 'axios';
 import JSZip from 'jszip';
 import convert from 'xml-js';
 
-const key = process.env.REACT_APP_DART_API_KEY;
+const key = '874657bc53deddcece2b8a28e6f624f47977f073';
+
+// const key = process.env.REACT_APP_DART_API_KEY;
 
 export const fetchCORPCODE = async () => {
-  const uniqueIdAPI = `api/corpCode.xml?crtfc_key=${key}`;
+  const uniqueIdAPI = `/giphy/api/corpCode.xml?crtfc_key=${key}`;
 
   try {
     const CORPCODE = await axios
@@ -28,9 +30,9 @@ export const fetchCORPCODE = async () => {
   }
 };
 
-export const fetchAccountsOfFS = async (choiceCorpList: ChoiseCorpList) => {
+export const fetchAccountsOfFS = async (choiceCorpList: DataForFetch) => {
   const { corp_code, bsns_year, reprt_code } = choiceCorpList;
-  const MajorOfFsAPI = `api/fnlttSinglAcntAll.json?crtfc_key=${key}&corp_code=${corp_code}&bsns_year=${bsns_year}&reprt_code=${reprt_code}&fs_div=OFS`;
+  const MajorOfFsAPI = `/giphy/api/fnlttSinglAcntAll.json?crtfc_key=${key}&corp_code=${corp_code}&bsns_year=${bsns_year}&reprt_code=${reprt_code}&fs_div=OFS`;
   console.log(MajorOfFsAPI);
   try {
     const MajorOfFS = await axios.get(MajorOfFsAPI);
@@ -42,11 +44,9 @@ export const fetchAccountsOfFS = async (choiceCorpList: ChoiseCorpList) => {
   }
 };
 
-export const fetchMajorAccountsOfFS = async (
-  choiceCorpList: ChoiseCorpList
-) => {
+export const fetchMajorAccountsOfFS = async (choiceCorpList: DataForFetch) => {
   const { corp_code, bsns_year, reprt_code } = choiceCorpList;
-  const MajorOfFsAPI = `api/fnlttSinglAcnt.json?crtfc_key=${key}&corp_code=${corp_code}&bsns_year=${bsns_year}&reprt_code=${reprt_code}`;
+  const MajorOfFsAPI = `/giphy/api/fnlttSinglAcnt.json?crtfc_key=${key}&corp_code=${corp_code}&bsns_year=${bsns_year}&reprt_code=${reprt_code}`;
   console.log(MajorOfFsAPI);
 
   try {
@@ -59,9 +59,9 @@ export const fetchMajorAccountsOfFS = async (
   }
 };
 
-export const fetchRepurchase = async (choiceCorpList: ChoiseCorpList) => {
+export const fetchRepurchase = async (choiceCorpList: DataForFetch) => {
   const { corp_code, bsns_year, reprt_code } = choiceCorpList;
-  const RepurchaseAPI = `api/tesstkAcqsDspsSttus.json?crtfc_key=${key}&corp_code=${corp_code}&bsns_year=${bsns_year}&reprt_code=${reprt_code}`;
+  const RepurchaseAPI = `/giphy/api/tesstkAcqsDspsSttus.json?crtfc_key=${key}&corp_code=${corp_code}&bsns_year=${bsns_year}&reprt_code=${reprt_code}`;
   console.log(RepurchaseAPI);
 
   try {
@@ -74,9 +74,9 @@ export const fetchRepurchase = async (choiceCorpList: ChoiseCorpList) => {
   }
 };
 
-export const fetchStaff = async (choiceCorpList: ChoiseCorpList) => {
+export const fetchStaff = async (choiceCorpList: DataForFetch) => {
   const { corp_code, bsns_year, reprt_code } = choiceCorpList;
-  const StaffAPI = `api/empSttus.json?crtfc_key=${key}&corp_code=${corp_code}&bsns_year=${bsns_year}&reprt_code=${reprt_code}`;
+  const StaffAPI = `/giphy/api/empSttus.json?crtfc_key=${key}&corp_code=${corp_code}&bsns_year=${bsns_year}&reprt_code=${reprt_code}`;
   console.log(StaffAPI);
 
   try {

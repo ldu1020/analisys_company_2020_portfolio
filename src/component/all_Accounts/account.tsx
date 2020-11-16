@@ -1,5 +1,8 @@
 /** @format */
 
+import React from 'react';
+import { observer } from 'mobx-react';
+import { nanoid } from 'nanoid';
 import {
   IconButton,
   List,
@@ -10,9 +13,6 @@ import {
   Menu,
   MenuItem,
 } from '@material-ui/core';
-import { observer } from 'mobx-react';
-import { nanoid } from 'nanoid';
-import React from 'react';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 type AccountCallBack = (item: AccountsType) => void;

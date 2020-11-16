@@ -1,13 +1,12 @@
 /** @format */
 
-import { Box, Card, makeStyles, Typography } from '@material-ui/core';
-import { observer, useLocalObservable } from 'mobx-react';
 import React from 'react';
-import { useStore } from '../../stores/setUpContext';
+import { reaction } from 'mobx';
+import { observer, useLocalObservable } from 'mobx-react';
+import { Box, Card, makeStyles, Typography } from '@material-ui/core';
+
 import Account from './account';
 import AccountsPicker from './accounts_picker';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { reaction } from 'mobx';
 
 const useStyles = makeStyles((theme) => ({
   root: {

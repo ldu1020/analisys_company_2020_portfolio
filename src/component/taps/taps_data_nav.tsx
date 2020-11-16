@@ -1,20 +1,22 @@
 /** @format */
 
 import React from 'react';
+import { observer } from 'mobx-react';
+
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
-import Staff from '../staff/staff';
-import AllAccounts from '../all_accounts/main_all_accounts';
-import { useStore } from '../../stores/setUpContext';
-import { observer } from 'mobx-react';
-import AllMajorAccounts from '../major-accounts/main_major_accouts';
 import { Container, makeStyles, Paper } from '@material-ui/core';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
-import NonFetchedDataDisplay from '../non_fetched_data/non_fetched_data';
+
+import AllAccounts from '../all_accounts/main_all_accounts';
+import AllMajorAccounts from '../major-accounts/main_major_accouts';
+import Staff from '../staff/staff';
 import InLoading from '../in_loading/in_loading';
+import NonFetchedDataDisplay from '../non_fetched_data/non_fetched_data';
+import { useStore } from '../../stores/setUpContext';
 
 const useStyles = makeStyles((theme) => ({
   root: {

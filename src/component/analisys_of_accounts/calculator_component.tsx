@@ -1,5 +1,10 @@
 /** @format */
 
+import React, { useEffect, useState } from 'react';
+import { reaction } from 'mobx';
+import { observer } from 'mobx-react';
+import CountUp from 'react-countup';
+
 import {
   Accordion,
   AccordionDetails,
@@ -7,13 +12,10 @@ import {
   Box,
   makeStyles,
 } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
-import CountUp from 'react-countup';
-import CalcCard from './calc_card';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { reaction } from 'mobx';
+
+import CalcCard from './calc_card';
 import { useStore } from '../../stores/setUpContext';
-import { observer } from 'mobx-react';
 
 interface CalculatorComponentProps {
   description: string;
@@ -49,13 +51,13 @@ const CalculatorComponent: React.FC<CalculatorComponentProps> = observer(
     const classes = useStyles();
     const rootStore = useStore();
     const { flatDataOfFocused } = rootStore;
-    const [result, setresult] = useState(0);
     const [plusState, setplusState] = useState<FlatData[]>(
       getAccounts(flatDataOfFocused!, plus)
     );
     const [divisionState, setdivisionState] = useState<FlatData[]>(
       getAccounts(flatDataOfFocused!, division)
     );
+    const [result, setresult] = useState(0);
 
     useEffect(() => {
       const molecular = plusState

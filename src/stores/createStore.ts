@@ -8,10 +8,19 @@ import {
   fetchAccountsOfFS,
   fetchMajorAccountsOfFS,
 } from './../service/dart_api';
-import { findCorpCodeOfDB } from '../service/database';
+import { findCorpCodeOfDB, testSync } from '../service/database';
 
-export function createStore() {
+export function createStore(): STORE {
   return {
+    async ForERROR() {
+      this.fetchLoading = true;
+      testSync((data: Record<string, ChosenCorpList>) => {
+        Object.values(data).forEach((dataList) => {
+          dataList && this.addChosenCorpList(dataList);
+        });
+        this.fetchLoading = false;
+      });
+    },
     async findCorpName(corp_name: string, callback: any) {
       await findCorpCodeOfDB(corp_name, (dataOfDB: any) => {
         let value = dataOfDB ? Object.values(dataOfDB)[0] : null;
@@ -20,12 +29,17 @@ export function createStore() {
     },
     chosenCorpList: [] as ChosenCorpList[],
     addChosenCorpList(data: ChosenCorpList) {
-      this.chosenCorpList.push(data);
+      const inItem = this.chosenCorpList.find(
+        (li) =>
+          data.corp_name + data.bsns_year + data.reprt_code ===
+          li.corp_name + li.bsns_year + li.reprt_code
+      );
+      !inItem && this.chosenCorpList.push(data);
     },
     removeChosenCorpList(id: string) {
       this.chosenCorpList = this.chosenCorpList.filter((li) => li.id !== id);
     },
-    async addFetchedCorpData(choiceList: ChoiseCorpList) {
+    async addFetchedCorpData(choiceList: DataForFetch) {
       try {
         this.fetchLoading = true;
 
@@ -122,18 +136,6 @@ export function createStore() {
       ];
 
       return flattenAllAccounts?.concat(flattenStaff);
-    },
-    customSET: [],
-    itemForCustom: [] as ItemForCustomData[],
-    addItemForCustom(data: ItemForCustomData) {
-      console.log(this.itemForCustom);
-      const notInnerData = this.itemForCustom.findIndex(
-        (li) => li.name + li.detail === data.name + data.detail
-      );
-      notInnerData === -1 && this.itemForCustom.push(data);
-    },
-    removeItemForCustom(name: string) {
-      this.itemForCustom = this.itemForCustom.filter((li) => li.name !== name);
     },
   };
 }

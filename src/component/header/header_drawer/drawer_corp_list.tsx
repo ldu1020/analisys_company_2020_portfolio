@@ -1,5 +1,7 @@
 /** @format */
 
+import React from 'react';
+import { observer } from 'mobx-react';
 import {
   IconButton,
   List,
@@ -8,10 +10,9 @@ import {
   makeStyles,
   useTheme,
 } from '@material-ui/core';
-import React from 'react';
-import { useStore } from '../../../stores/setUpContext';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import { observer } from 'mobx-react';
+
+import { useStore } from '../../../stores/setUpContext';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -79,7 +80,7 @@ const DrawerCorpList: React.FC<DrawerCorpListProps> = observer(
             />
             <IconButton
               onClick={(event) => {
-                removeChosenCorpList(item.id);
+                removeChosenCorpList(item.id!);
               }}>
               <DeleteOutlineIcon />
             </IconButton>

@@ -4,16 +4,19 @@ import { firebaseDatabase } from './firebase';
 
 //test
 
-export function testSave(data: any) {
+export function testSave(data: any, corp_name: string) {
   firebaseDatabase //
-    .ref(`/corpcode`)
+    .ref(`test/corpListDataForError/${corp_name}`)
     .set(data);
+
+  console.log('ok save..');
 }
 
 export function testSync(onUpdate: any) {
-  const ref = firebaseDatabase.ref(`test/focusedData`);
+  const ref = firebaseDatabase.ref(`test/corpListDataForError`);
   ref.on('value', (snapshot) => {
     const value = snapshot.val();
+    console.log(value);
     value && onUpdate(value);
   });
 

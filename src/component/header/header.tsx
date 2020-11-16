@@ -1,5 +1,8 @@
 /** @format */
 
+import React, { useState } from 'react';
+import { reaction } from 'mobx';
+import { observer } from 'mobx-react';
 import {
   AppBar,
   Badge,
@@ -9,12 +12,10 @@ import {
   Toolbar,
   Typography,
 } from '@material-ui/core';
-import React, { useState } from 'react';
 import MenuIcon from '@material-ui/icons/Menu';
+
 import HeaderDrawer from './header_drawer/header_drawer';
 import { useStore } from '../../stores/setUpContext';
-import { reaction } from 'mobx';
-import { observer } from 'mobx-react';
 
 interface HeaderProps {
   onLogout?: () => void;

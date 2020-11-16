@@ -1,13 +1,14 @@
 /** @format */
 
-import { makeStyles, Tab, Tabs } from '@material-ui/core';
+import React from 'react';
 import { autorun, reaction } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react';
-import React from 'react';
-import { useStore } from '../../stores/setUpContext';
+import { makeStyles, Tab, Tabs } from '@material-ui/core';
+
 import StaffCard from './staff_card';
 import StaffGraph from './staff_graph';
 import { staffState } from './staff_state';
+import { useStore } from '../../stores/setUpContext';
 
 const useStyles = makeStyles((theme) => ({
   root: {

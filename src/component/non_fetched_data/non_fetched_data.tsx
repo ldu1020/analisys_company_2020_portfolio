@@ -1,7 +1,7 @@
 /** @format */
 
-import { Box, Card, Typography } from '@material-ui/core';
 import React from 'react';
+import { Box, Card, Typography } from '@material-ui/core';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 const NonFetchedDataDisplay = () => {
   return (

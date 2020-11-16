@@ -1,5 +1,9 @@
 /** @format */
 
+import React, { useReducer } from 'react';
+import { nanoid } from 'nanoid';
+import { observer } from 'mobx-react';
+
 import {
   Box,
   Button,
@@ -13,14 +17,12 @@ import {
   Typography,
   Zoom,
 } from '@material-ui/core';
-import React, { useReducer } from 'react';
-import { useStore } from '../../stores/setUpContext';
 import CheckIcon from '@material-ui/icons/Check';
 import { DoubleArrow } from '@material-ui/icons';
 import SearchIcon from '@material-ui/icons/Search';
+
 import { ffc_initialState, reducer } from './ffc_reducer';
-import { nanoid } from 'nanoid';
-import { observer } from 'mobx-react';
+import { useStore } from '../../stores/setUpContext';
 
 const useStyles = makeStyles((theme) => ({
   root: {

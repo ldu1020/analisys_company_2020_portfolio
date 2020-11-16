@@ -9,53 +9,49 @@ type UserData = {
 //Store
 
 interface STORE {
-  findCorpName(corp_name: string): CORPCODE;
+  /** 모종의 문제로 DART API 를 이용하지 못할 시 를 대비해 firebase 에 저장해둔 회사들의 데이터를 chosenCorpList 로 할당합니다.  */
+  ForERROR(): void;
+  /** 회사이름을 인자로 데이터베이스에서 해당회사의 코드를 찾아 인자로 받은 콜백에 데이터를 전달합니다. . */
+  findCorpName(corp_name: string, callback: any): Promise<void>;
+  /** 이 앱에서 전달하는 모든 정보가 회사별로 구분된 데이터입니다.*/
   chosenCorpList: ChosenCorpList[];
+  addChosenCorpList(data: ChosenCorpList): void;
+  removeChosenCorpList(id: string): void;
+  /** Promise All을 이용하여 chosenCoprList에 fetch 된 데이터를 추가합니다. */
+  addFetchedCorpData(dataForFetch: DataForFetch): Promise<void>;
+  /**Promise All 을 이용한 addFetchedCorpData 함수가 실행 되는 동안의 로딩의 상태입니다. */
+  fetchLoading: boolean;
+  /** 각 회사의 데이터를 보여주는 컴포넌트는 이 데이터를 중심으로 랜더링됩니다.*/
   focusedCorpList: ChosenCorpList;
-  setCorpList(): void;
-  addFetchedCorpData(dataForFetch: DataForFetch): void;
-  setFocusedCorpList(data: ChosenCorpList | null): void;
-  flatDataOfFocused(): FlatData[];
+  setFocusedCorpList(data: ChosenCorpList): void;
+  /** 주요 계정과목을 위한 데이터입니다. focusedCorpList에서 데이터를 가공하여
+   * 단일재무제표(OFS) 의 손익계산서(IS)와 대차대조표(BS)의 데이터로 필터링 했습니다 */
+  readonly fitteredMajorDataOfFocused: {
+    ISdata: MajorAccountsType[] | undefined;
+    BSdata: MajorAccountsType[] | undefined;
+  };
+  /** 복합분석을 위한 데이터입니다. focusedCorpList에서 데이터를 가공합니다 이름, 이름디테일,minus 사용여부,금액(number) 데이터로 가공했습니다. */
+  readonly flatDataOfFocused: FlatData[] | undefined;
 }
 
-type FlatData = {
-  name: string;
-  amount: number;
-  detail?: string;
-  minus?: boolean;
-};
-
-type ChoiseCorpList = {
-  id: string;
-  corp_code: string;
-  corp_name: string;
-  bsns_year: string;
-  reprt_code: stirng;
-};
-
-interface ChosenCorpList extends ChoiseCorpList {
-  allAccounts: AccountsType[] | null;
-  majorAccounts: MajorAccountsType[] | null;
-  staff: StaffType[] | null;
-}
-
-//Find Corp Data input State
-type CORPCODE = {
-  corp_code: string;
-  corp_name: string;
-};
+//For Component
 
 type FindCorpState = {
+  nameError: boolean;
   corp_name: AccountsType['corp_name'];
+  corp_code: string | null;
   bsns_year: AccountsType['bsns_year'];
   reprt_code: AccountsType['reprt_code'];
-  nameError: boolean;
-  corp_code: string | null;
 };
 
 type FindCorpAction =
   | { type: 'ON_CHANGE'; target: any }
   | { type: 'SEARCH_NAME'; corp_code: any };
+
+type CORPCODE = {
+  corp_code: string;
+  corp_name: string;
+};
 
 interface DataForFetch extends CORPCODE {
   id?: string;
@@ -65,7 +61,21 @@ interface DataForFetch extends CORPCODE {
 
 type ErrorDataOfFetch = [{ error: string }];
 
+//For STORE
 type FsFilterType = 'IS' | 'BS';
+
+interface ChosenCorpList extends DataForFetch {
+  allAccounts: AccountsType[] | null;
+  majorAccounts: MajorAccountsType[] | null;
+  staff: StaffType[] | null;
+}
+
+type FlatData = {
+  name: string;
+  amount: number;
+  detail?: string;
+  minus?: boolean;
+};
 
 type AmountOf3Years = {
   account_nm: string;
@@ -75,12 +85,6 @@ type AmountOf3Years = {
   frmtrm_amount: string;
   bfefrmtrm_nm: string;
   bfefrmtrm_amount: string;
-};
-
-type ItemForCustomData = {
-  name: string;
-  amount: string;
-  detail?: string;
 };
 
 /**전채제무제표의 계정과목 */

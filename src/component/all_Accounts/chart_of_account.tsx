@@ -1,7 +1,7 @@
 /** @format */
 
-import { observer } from 'mobx-react';
 import React from 'react';
+import { observer } from 'mobx-react';
 import { Line } from 'react-chartjs-2';
 
 interface ChartOfAccountsProps {
@@ -20,6 +20,7 @@ const ChartOfAccounts: React.FC<ChartOfAccountsProps> = observer(
       bfefrmtrm_nm,
       bfefrmtrm_amount,
     } = pickedItem;
+
     const ColorRedAndBlue = (opacity: number) => {
       const index = Number(thstrm_amount);
       return index >= 0

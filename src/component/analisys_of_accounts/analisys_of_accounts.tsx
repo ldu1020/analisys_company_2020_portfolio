@@ -1,5 +1,8 @@
 /** @format */
 
+import React, { useLayoutEffect, useRef, useState } from 'react';
+import { observer } from 'mobx-react';
+
 import {
   Accordion,
   AccordionDetails,
@@ -11,13 +14,12 @@ import {
   IconButton,
   makeStyles,
 } from '@material-ui/core';
-import { observer } from 'mobx-react';
-import React, { useLayoutEffect, useRef, useState } from 'react';
-import { useStore } from '../../stores/setUpContext';
+import SearchIcon from '@material-ui/icons/Search';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 import NonFetchedDataDisplay from '../non_fetched_data/non_fetched_data';
 import CalculatorComponent from './calculator_component';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import SearchIcon from '@material-ui/icons/Search';
+import { useStore } from '../../stores/setUpContext';
 
 const useStyles = makeStyles((theme) => ({
   analisysSet: {

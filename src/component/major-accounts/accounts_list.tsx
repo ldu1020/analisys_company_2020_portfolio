@@ -1,5 +1,8 @@
 /** @format */
 
+import React from 'react';
+import { observer } from 'mobx-react';
+import CountUp from 'react-countup';
 import {
   Box,
   Card,
@@ -8,9 +11,6 @@ import {
   ListItemText,
   makeStyles,
 } from '@material-ui/core';
-import { observer } from 'mobx-react';
-import React from 'react';
-import CountUp from 'react-countup';
 
 export interface AccountsListProps {
   majorAccount: AccountsType[];

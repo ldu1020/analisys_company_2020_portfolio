@@ -1,19 +1,20 @@
 /** @format */
 
-import React, { Suspense } from 'react';
+import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
+
 import InLoading from './component/in_loading/in_loading';
 import { StoreProvider } from './stores/setUpContext';
 
-const App = React.lazy(() => import('./App'));
+const App = lazy(() => import('./App'));
 
 ReactDOM.render(
   <React.StrictMode>
-    <StoreProvider>
-      <Suspense fallback={<InLoading fullSize />}>
+    <Suspense fallback={<InLoading fullSize />}>
+      <StoreProvider>
         <App />
-      </Suspense>
-    </StoreProvider>
+      </StoreProvider>
+    </Suspense>
   </React.StrictMode>,
   document.getElementById('root')
 );

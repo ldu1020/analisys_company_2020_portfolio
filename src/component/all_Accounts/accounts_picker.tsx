@@ -1,5 +1,7 @@
 /** @format */
 
+import React, { useState } from 'react';
+import { observer } from 'mobx-react';
 import {
   Box,
   FormControl,
@@ -9,8 +11,7 @@ import {
   Select,
   useTheme,
 } from '@material-ui/core';
-import { observer } from 'mobx-react';
-import React, { useState } from 'react';
+
 import NonFetchedDataDisplay from '../non_fetched_data/non_fetched_data';
 import ChartOfAccounts from './chart_of_account';
 
