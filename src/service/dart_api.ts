@@ -1,39 +1,11 @@
 /** @format */
 import axios from 'axios';
-import JSZip from 'jszip';
-import convert from 'xml-js';
 
-const key = '874657bc53deddcece2b8a28e6f624f47977f073';
-
-// const key = process.env.REACT_APP_DART_API_KEY;
-
-export const fetchCORPCODE = async () => {
-  const uniqueIdAPI = `/giphy/api/corpCode.xml?crtfc_key=${key}`;
-
-  try {
-    const CORPCODE = await axios
-      .get(uniqueIdAPI, {
-        responseType: 'arraybuffer',
-      })
-      .then((res) => {
-        return unZip(res);
-      })
-      .then((res) => {
-        return toJson(res).result.list;
-      });
-
-    return CORPCODE;
-  } catch (err) {
-    alert(
-      `데이터를 불러오지 못했습니다. 오류가 계속 될 시 dart api 홈페이지를 방문 해 보세요`
-    );
-  }
-};
+const key = process.env.REACT_APP_DART_API_KEY;
 
 export const fetchAccountsOfFS = async (choiceCorpList: DataForFetch) => {
   const { corp_code, bsns_year, reprt_code } = choiceCorpList;
   const MajorOfFsAPI = `/giphy/api/fnlttSinglAcntAll.json?crtfc_key=${key}&corp_code=${corp_code}&bsns_year=${bsns_year}&reprt_code=${reprt_code}&fs_div=OFS`;
-  console.log(MajorOfFsAPI);
   try {
     const MajorOfFS = await axios.get(MajorOfFsAPI);
     return MajorOfFS;
@@ -47,7 +19,6 @@ export const fetchAccountsOfFS = async (choiceCorpList: DataForFetch) => {
 export const fetchMajorAccountsOfFS = async (choiceCorpList: DataForFetch) => {
   const { corp_code, bsns_year, reprt_code } = choiceCorpList;
   const MajorOfFsAPI = `/giphy/api/fnlttSinglAcnt.json?crtfc_key=${key}&corp_code=${corp_code}&bsns_year=${bsns_year}&reprt_code=${reprt_code}`;
-  console.log(MajorOfFsAPI);
 
   try {
     const MajorOfFS = await axios.get(MajorOfFsAPI);
@@ -62,7 +33,6 @@ export const fetchMajorAccountsOfFS = async (choiceCorpList: DataForFetch) => {
 export const fetchRepurchase = async (choiceCorpList: DataForFetch) => {
   const { corp_code, bsns_year, reprt_code } = choiceCorpList;
   const RepurchaseAPI = `/giphy/api/tesstkAcqsDspsSttus.json?crtfc_key=${key}&corp_code=${corp_code}&bsns_year=${bsns_year}&reprt_code=${reprt_code}`;
-  console.log(RepurchaseAPI);
 
   try {
     const Repurchase = await axios.get(RepurchaseAPI);
@@ -77,7 +47,6 @@ export const fetchRepurchase = async (choiceCorpList: DataForFetch) => {
 export const fetchStaff = async (choiceCorpList: DataForFetch) => {
   const { corp_code, bsns_year, reprt_code } = choiceCorpList;
   const StaffAPI = `/giphy/api/empSttus.json?crtfc_key=${key}&corp_code=${corp_code}&bsns_year=${bsns_year}&reprt_code=${reprt_code}`;
-  console.log(StaffAPI);
 
   try {
     const Staff = await axios.get(StaffAPI);
@@ -86,27 +55,5 @@ export const fetchStaff = async (choiceCorpList: DataForFetch) => {
     alert(
       `직원 현황 데이터를 불러오지 못했습니다. 오류가 계속 될 시 dart api 홈페이지를 방문 해 보세요`
     );
-  }
-};
-
-function unZip(res: any) {
-  return JSZip.loadAsync(res.data).then((data) =>
-    data.files['CORPCODE.xml'].async('string')
-  );
-}
-
-function toJson(data: string) {
-  const options = { compact: true, spaces: 4, textFn: RemoveJsonTextAttribute };
-  let dataString = convert.xml2json(data, options);
-  return JSON.parse(dataString);
-}
-
-const RemoveJsonTextAttribute = (value: any, parentElement: any) => {
-  try {
-    const keyNo = Object.keys(parentElement._parent).length;
-    const keyName = Object.keys(parentElement._parent)[keyNo - 1];
-    parentElement._parent[keyName] = value;
-  } catch (e) {
-    console.log(e);
   }
 };

@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: 'lightgray',
   },
   subHeader: {
+    fontWeight: 'lighter',
     margin: '1rem',
     fontSize: '1.3rem',
   },

@@ -18,6 +18,8 @@ export function createStore(): STORE {
         Object.values(data).forEach((dataList) => {
           dataList && this.addChosenCorpList(dataList);
         });
+        this.chosenCorpList.length > 0 &&
+          this.setFocusedCorpList(this.chosenCorpList[0]);
         this.fetchLoading = false;
       });
     },

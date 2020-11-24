@@ -127,19 +127,21 @@ const FindCorpCode = observer(() => {
           onChange={onChange}
           variant='outlined'
         />
-        <Button
-          className={classes.nameSubmit}
-          onClick={onSearchName}
-          variant='outlined'
-          color='primary'>
-          {state.corp_code ? (
-            <Zoom in={state.corp_code ? true : false}>
-              <CheckIcon style={{ color: 'lightgreen' }} />
-            </Zoom>
-          ) : (
-            <SearchIcon />
-          )}
-        </Button>
+        <Zoom in={state.nameError ? false : true}>
+          <Button
+            className={classes.nameSubmit}
+            onClick={onSearchName}
+            variant='outlined'
+            color='primary'>
+            {state.corp_code ? (
+              <Zoom in={state.corp_code ? true : false}>
+                <CheckIcon style={{ color: 'lightgreen' }} />
+              </Zoom>
+            ) : (
+              <SearchIcon />
+            )}
+          </Button>
+        </Zoom>
       </Box>
       <Box display='flex'>
         <Box display='flex' flexDirection='column' width='50%'>

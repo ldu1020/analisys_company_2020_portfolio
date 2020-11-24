@@ -21,8 +21,6 @@ export function reducer(
         return { ...state, [name]: value };
       }
     case 'SEARCH_NAME':
-      console.log(action.corp_code);
-
       if (action.corp_code) {
         return { ...state, corp_code: action.corp_code, nameError: false };
       } else {

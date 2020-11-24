@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
   basis: {
     color: theme.palette.text.secondary,
+    wordBreak: 'keep-all',
   },
   result: {
     position: 'absolute',
@@ -113,9 +114,9 @@ const CalculatorComponent: React.FC<CalculatorComponentProps> = observer(
                             : divisionState[0].amount
                           : `(${divisionState
                               .map((li) =>
-                                li.minus ? li.amount * -1 : li.amount
+                                li.minus ? `(${li.amount * -1})` : li.amount
                               )
-                              .join('+')})`}
+                              .join(` + `)})`}
                       </span>
                     </>
                   )}
