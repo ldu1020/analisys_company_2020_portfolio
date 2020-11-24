@@ -7,6 +7,7 @@ import {
   FormControl,
   InputLabel,
   ListItemText,
+  makeStyles,
   MenuItem,
   Select,
   useTheme,
@@ -19,6 +20,12 @@ interface AccountsPickerProps {
   chosenFsList: AccountsType[];
 }
 
+const useStyles = makeStyles((theme) => ({
+  seletor: {
+    minWidth: '10rem',
+  },
+}));
+
 const AccountsPicker: React.FC<AccountsPickerProps> = observer(
   ({ chosenFsList }) => {
     const [pickedItem, setPickedItem] = useState<AccountsType>();
@@ -29,7 +36,7 @@ const AccountsPicker: React.FC<AccountsPickerProps> = observer(
       chosenItem && setPickedItem(chosenItem);
     };
     const theme = useTheme();
-
+    const classes = useStyles();
     return (
       <Box
         display='flex'
@@ -38,11 +45,11 @@ const AccountsPicker: React.FC<AccountsPickerProps> = observer(
         alignItems='center'
         width='100%'
         height='20rem'>
-        <FormControl>
-          <InputLabel>계정과목분석</InputLabel>
+        <FormControl className={classes.seletor}>
+          <InputLabel>3분기조회</InputLabel>
           <Select
             renderValue={(value) => `${value}`}
-            value={pickedItem ? pickedItem.account_nm : '선택해주세요'}
+            value={pickedItem ? pickedItem.account_nm : ''}
             onChange={handleChange}>
             {chosenFsList.map((li) => {
               return (

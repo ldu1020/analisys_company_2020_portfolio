@@ -6,7 +6,6 @@ import ReactDOM from 'react-dom';
 
 import InLoading from './component/in_loading/in_loading';
 import { StoreProvider } from './stores/setUpContext';
-import './index.css';
 
 const App = lazy(() => import('./App'));
 const theme = createMuiTheme({

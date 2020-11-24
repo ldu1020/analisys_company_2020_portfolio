@@ -29,13 +29,15 @@ const ChartOfAccounts: React.FC<ChartOfAccountsProps> = observer(
     };
 
     const data = {
-      labels: [bfefrmtrm_nm, frmtrm_nm, thstrm_nm],
+      labels: [bfefrmtrm_nm, frmtrm_nm, thstrm_nm].filter((li) => li),
       datasets: [
         {
           label: `${account_detail === '-' ? account_nm : account_detail}`,
           backgroundColor: ColorRedAndBlue(0.3),
           borderColor: ColorRedAndBlue(1),
-          data: [bfefrmtrm_amount, frmtrm_amount, thstrm_amount],
+          data: [bfefrmtrm_amount, frmtrm_amount, thstrm_amount].filter(
+            (li) => li
+          ),
           fill: true,
         },
       ],
