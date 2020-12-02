@@ -24,7 +24,7 @@ DART API 가 제공하는 상장회사의 주요 제무정보를 가시적으로
 
 ### App 구조
 
-<img src="/App.png" width="40%" height="30%" title="app 구조" alt="app 구조"></img>
+<img src="/App.png" width="100%" height="100%" title="앱 구조" alt="앱 구조"></img>
 
 ### back-end 구조
 
@@ -35,9 +35,15 @@ DART API 가 제공하는 상장회사의 주요 제무정보를 가시적으로
 
   -> state 저장 혹은 큰 용량의 반복되는 데이터 페칭보다 . firebase에 데이터를 저장해서 firebase 에서 제공하는 검색기능으로 state 와 네트워크의 부담을 최소화했습니다.
 
-- **회사 코드는 존재하지만 데이터가 비어있는 경우가 많고 , dart api 의 문제시**  
-      
-   ->firebase 에 백업데이터를 준비함으로써 예외의 상황에 대비하였습니다.
+<<<<<<< HEAD
+
+- **회사 코드는 존재하지만 데이터가 비어있는 경우가 많고 , dart api 의 문제시**
+  # ->firebase 에 백업데이터를 준비함으로써 예외의 상황에 대비하였습니다.
+- **회사 코드는 존재하지만 데이터가 비어있는 경우가 많고 , dart api 의 문제시**
+
+  ->firebase 에 백업데이터를 준비함으로써 예외의 상황에 대비하였습니다.
+
+  > > > > > > > 2f908b8... fix read me
 
 ### front-end 구조
 
