@@ -50,7 +50,7 @@ function TabPanel(props: TabPanelProps) {
       {...other}>
       {value === index && (
         <Container maxWidth='md'>
-          <Box p={3}>{children}</Box>
+          <Box>{children}</Box>
         </Container>
       )}
     </div>

@@ -1,44 +1,48 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<!-- @format -->
 
-## Available Scripts
+## 돋보기
 
-In the project directory, you can run:
+DART API 가 제공하는 상장회사의 주요 제무정보를 가시적으로 전달하는 WEB APP
 
-### `yarn start`
+-go to page: <https://portfolio-2020-analisys-company.netlify.app/>
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### 주요기능
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+-상장회사의 검색 및 데이터 유무 판별 -재무제표의 목록 별 3분기 실적의 가시적인 조회(chart.js) -주요한 재무정보의 간단분석 -직원의 인원,급여 가시적인 조회 (svg,path-clip) -주요 분석지표를 이용한 자동 계산 및 사용자 임의 설정
+-API 문제 시 테스트 및 이용을 위한 백업 데이터
 
-### `yarn test`
+### 기술요점
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+-mobx 를 이용한 상태관리
+-css-in-js 를이용한 스타일링 -회사별 상이한 데이터에 대한 예외처리를 단순 alert 메세지보다 -시각적으로 표현을 지향 및 일부 예외처리는 사용자가 조작할 수 있게 끔 유도 했습니다. -데이터에 취급에 대한 유저의 관여도를 높였습니다.
 
-### `yarn build`
+### App 구조
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<img src="/App.png" width="40%" height="30%" title="px(픽셀) 크기 설정" alt="RubberDuck"></img>
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+### back-end 구조
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+데이터는 주로 DART API 에서 비동기적으로 받아오지만
+일부 특수한 상황에는 firebase 를 이용했습니다. 특수한 상황은 다음과 같습니다.
 
-### `yarn eject`
+- 데이터 검색할 때마다 필요한 26800 개가 되는 상장회사 코드  
+  -> state 저장 혹은 큰 용량의 반복되는 데이터 페칭보다 . firebase에 데이터를 저장해서 firebase 에서 제공하는 검색기능으로 state 와 네트워크의 부담을 최소화했습니다.
+- 회사 코드는 존재하지만 데이터가 비어있는 경우가 많고 , dart api 의 문제시  
+  ->firebase 에 백업데이터를 준비함으로써 예외의 상황에 대비하였습니다.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### front-end 구조
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- 앱전체의 영향을 미치는 스테이트 => mob x 로 전역적으로 관리
+- 부분에만 영향을 미치는 스테이트 => 각 컴포넌트의 스테이트로 관리
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+컴포넌트의 스테이트는 되도록 react 에서 제공하는 hook 솔루션을 이용하려 했습니다.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+복잡성이 증가하면 mobx 에서 제공하는 useLocalObservable Hook 을 이용하기도 했습니다.
 
-## Learn More
+각각의 컴포넌트 내에서는 prop 이 있는게 가독성이 좋다 판단하여 최대한 porp을 활용 했습니다
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 향후 추가 할 기능들
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- analisys of accounts 부분의 사용자가 자신의 커스텀 분석
+- firebase 를 이용한 개별적 관리
+- router 를 이용한 url 정보공유

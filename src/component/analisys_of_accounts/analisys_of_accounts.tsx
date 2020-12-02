@@ -127,7 +127,7 @@ const AnalisysOfAccounts: React.FC<Props> = observer(({ scrollToFind }) => {
 
   return (
     <Container maxWidth='md'>
-      <Box p={3}>
+      <Box>
         <h1 className={classes.title} ref={sectionRef}>
           분석
         </h1>
